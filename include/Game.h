@@ -1,14 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <iostream>
-using std::cout;
-using std::endl;
+#include "SDL.h"
 
 class Game
 {
     public:
-        ~Game() {cout << "_Game destructor" << endl;}
+        ~Game();
 
         bool init();
         void getInput();
@@ -16,14 +14,18 @@ class Game
         void render();
         void clean();
 
-        bool getbRunning() const {return bRunning;}
+        const bool& getbRunning() const {return bRunning;}
         static Game* getpGame();//create a single instance
 
+        bool& setbRunning() {return bRunning;}
+
     private:
+        SDL_Window* pWindow;
+        SDL_Renderer* pRenderer;
         bool bRunning;
         static Game* pGame;//pointer to the instance
 
-        Game(): bRunning(true) {cout << "_Game constructor" << endl;}//default constructor
+        Game();//default constructor
         Game(const Game& rhs);//copy constructor
         Game& operator=(const Game& rhs);//copy assignment operator
 };
