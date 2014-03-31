@@ -22,8 +22,7 @@ int main(int argc, char* argv[])
         Game::getpGame()->update();
         Game::getpGame()->render();
 
-        SDL_Delay(5000);
-        Game::getpGame()->setbRunning() = false;
+        SDL_Delay(10);
 
     }
 
