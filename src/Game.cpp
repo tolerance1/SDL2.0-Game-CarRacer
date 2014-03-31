@@ -62,7 +62,19 @@ bool Game::init()
 
 void Game::getInput()
 {
+    SDL_Event event;//events are placed into this union of structs
+    if(SDL_PollEvent(&event))//returns 1 if an event has been placed into the union
+    {
+        switch(event.type)//check the event type
+        {
+            case SDL_QUIT:
+                bRunning = false;
+                break;
 
+            default:
+                break;
+        }
+    }
 }
 
 void Game::update()
@@ -83,6 +95,9 @@ void Game::render()
 
 void Game::clean()
 {
+    //always remember to clean and delete pointers before exit!!!
+    SDL_DestroyRenderer(pRenderer);
+    SDL_DestroyWindow(pWindow);
     delete pGame;//release the Game object memory
     SDL_Quit();
 }
