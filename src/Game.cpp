@@ -1,11 +1,20 @@
 #include "Game.h"
 
+#include "SDL_image.h"
+SDL_Texture* pTexture;
+SDL_Rect sourceRectangle;
+SDL_Rect destRectangle;
+
+SDL_Texture* pTexture2;
+SDL_Rect sourceRectangle2;
+SDL_Rect destRectangle2;
+
 #include <iostream>
 using std::cout;
 using std::endl;
 
 //STATIC VAR INIT
-Game* Game::pGame = NULL;
+Game* Game::pGame = nullptr;
 
 Game::Game()
 {
@@ -19,7 +28,7 @@ Game::~Game()
 
 Game* Game::getpGame()
 {
-    if(pGame == NULL)
+    if(pGame == nullptr)
     {
         pGame = new Game();
         return pGame;
@@ -55,6 +64,45 @@ bool Game::init()
         return false;
     }
 
+
+
+    //create surface first
+    SDL_Surface* pTempSurface = IMG_Load("images/Renault-Top_1.png");
+    //create a texture next and store it!!!
+    pTexture = SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
+    //free temp surface
+    SDL_FreeSurface(pTempSurface);
+
+    //set dimensions
+    sourceRectangle.w = destRectangle.w = 45;
+    sourceRectangle.h = destRectangle.h = 80;
+
+    //set coordinates
+    sourceRectangle.x = 0;
+    sourceRectangle.y = 0;
+    destRectangle.x = 100;
+    destRectangle.y = 100;
+
+    //texture2
+    //create surface first
+    pTempSurface = IMG_Load("images/Renault-Top_3.png");
+    //create a texture next and store it!!!
+    pTexture2 = SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
+    //free temp surface
+    SDL_FreeSurface(pTempSurface);
+
+    //set dimensions
+    sourceRectangle2.w = destRectangle2.w = 45;
+    sourceRectangle2.h = destRectangle2.h = 80;
+
+    //set coordinates
+    sourceRectangle2.x = 0;
+    sourceRectangle2.y = 0;
+    destRectangle2.x = 200;
+    destRectangle2.y = 100;
+
+
+
     cout << "Starting the game loop!" << endl;
     return true;//start the game loop
 
@@ -79,7 +127,7 @@ void Game::getInput()
 
 void Game::update()
 {
-
+    sourceRectangle2.x = 45 * int(((SDL_GetTicks() / 100) % 2));
 }
 
 void Game::render()
@@ -88,6 +136,17 @@ void Game::render()
     SDL_SetRenderDrawColor(pRenderer, 0, 0, 255, 255);
     //clear the current rendering target with the drawing colour
     SDL_RenderClear(pRenderer);
+
+
+    //copy the texture to the renderer
+    SDL_RenderCopyEx(pRenderer, pTexture, &sourceRectangle, &destRectangle,
+                     0, 0, SDL_FLIP_NONE);
+
+    //copy the texture2 to the renderer
+    SDL_RenderCopyEx(pRenderer, pTexture2, &sourceRectangle2, &destRectangle2,
+                     0, 0, SDL_FLIP_NONE);
+
+
     //update the screen with rendering performed
     SDL_RenderPresent(pRenderer);
 
