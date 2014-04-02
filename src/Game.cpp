@@ -1,13 +1,6 @@
 #include "Game.h"
 
-#include "SDL_image.h"
-SDL_Texture* pTexture;
-SDL_Rect sourceRectangle;
-SDL_Rect destRectangle;
-
-SDL_Texture* pTexture2;
-SDL_Rect sourceRectangle2;
-SDL_Rect destRectangle2;
+#include "TextureManager.h"
 
 #include <iostream>
 using std::cout;
@@ -15,16 +8,6 @@ using std::endl;
 
 //STATIC VAR INIT
 Game* Game::pGame = nullptr;
-
-Game::Game()
-{
-    cout << "_Game constructor" << endl;
-}
-
-Game::~Game()
-{
-    cout << "_Game destructor" << endl;
-}
 
 Game* Game::getpGame()
 {
@@ -35,6 +18,16 @@ Game* Game::getpGame()
     }
 
     return pGame;
+}
+
+Game::Game()
+{
+    cout << "_Game constructor" << endl;
+}
+
+Game::~Game()
+{
+    cout << "_Game destructor" << endl;
 }
 
 bool Game::init()
@@ -66,40 +59,25 @@ bool Game::init()
 
 
 
-    //create surface first
-    SDL_Surface* pTempSurface = IMG_Load("images/Renault-Top_1.png");
-    //create a texture next and store it!!!
-    pTexture = SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
-    //free temp surface
-    SDL_FreeSurface(pTempSurface);
-
-    //set dimensions
-    sourceRectangle.w = destRectangle.w = 45;
-    sourceRectangle.h = destRectangle.h = 80;
-
-    //set coordinates
-    sourceRectangle.x = 0;
-    sourceRectangle.y = 0;
-    destRectangle.x = 100;
-    destRectangle.y = 100;
-
-    //texture2
-    //create surface first
-    pTempSurface = IMG_Load("images/Renault-Top_3.png");
-    //create a texture next and store it!!!
-    pTexture2 = SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
-    //free temp surface
-    SDL_FreeSurface(pTempSurface);
-
-    //set dimensions
-    sourceRectangle2.w = destRectangle2.w = 45;
-    sourceRectangle2.h = destRectangle2.h = 80;
-
-    //set coordinates
-    sourceRectangle2.x = 0;
-    sourceRectangle2.y = 0;
-    destRectangle2.x = 200;
-    destRectangle2.y = 100;
+    //create textures
+    if(! TextureManager::getpTextureManager()->createTexture("images/Renault-Top_1.png",
+                                                             "player_car_yellow",
+                                                             pRenderer) )
+    {
+        return false;//don't start the loop
+    }
+    if(! TextureManager::getpTextureManager()->createTexture("images/Renault-Top_2.png",
+                                                             "traffic_car_blue",
+                                                             pRenderer) )
+    {
+        return false;
+    }
+    if(! TextureManager::getpTextureManager()->createTexture("images/Renault-Top_3.png",
+                                                             "traffic_car_orange",
+                                                             pRenderer) )
+    {
+        return false;
+    }
 
 
 
@@ -127,7 +105,8 @@ void Game::getInput()
 
 void Game::update()
 {
-    sourceRectangle2.x = 45 * int(((SDL_GetTicks() / 100) % 2));
+    TextureManager::getpTextureManager()->setcurrentFrame()
+    = int(((SDL_GetTicks() / 100) % 2));
 }
 
 void Game::render()
@@ -138,13 +117,20 @@ void Game::render()
     SDL_RenderClear(pRenderer);
 
 
-    //copy the texture to the renderer
-    SDL_RenderCopyEx(pRenderer, pTexture, &sourceRectangle, &destRectangle,
-                     0, 0, SDL_FLIP_NONE);
+    //draw the created textures
+    int X = TextureManager::getpTextureManager()->getcurrentFrame();
 
-    //copy the texture2 to the renderer
-    SDL_RenderCopyEx(pRenderer, pTexture2, &sourceRectangle2, &destRectangle2,
-                     0, 0, SDL_FLIP_NONE);
+    TextureManager::getpTextureManager()->drawStatic("player_car_yellow", 100, 100,
+                                                     45, 80,
+                                                     pRenderer);
+    TextureManager::getpTextureManager()->drawAnimated("traffic_car_blue", 200, 100,
+                                                     45, 80,
+                                                     0, X,
+                                                     pRenderer);
+    TextureManager::getpTextureManager()->drawAnimated("traffic_car_orange", 300, 100,
+                                                     45, 80,
+                                                     0, X,
+                                                     pRenderer, SDL_FLIP_VERTICAL);
 
 
     //update the screen with rendering performed
@@ -154,9 +140,14 @@ void Game::render()
 
 void Game::clean()
 {
-    //always remember to clean and delete pointers before exit!!!
+    //ALWAYS REMEMBER TO CLEAN AND DELETE POINTERS BEFORE EXIT!!!
+
+    TextureManager::getpTextureManager()->DestroyTextures();//release the textures the TextureManager u_map holds
+    delete TextureManager::getpTextureManager();//release the TextureManager object memory
+
     SDL_DestroyRenderer(pRenderer);
     SDL_DestroyWindow(pWindow);
     delete pGame;//release the Game object memory
+    SDL_Delay(5000);
     SDL_Quit();
 }
