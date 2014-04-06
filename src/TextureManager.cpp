@@ -91,6 +91,7 @@ void TextureManager::drawAnimated(std::string textureID, int destX, int destY,
                                   int width, int height,
                                   int currentRow, int currentFrame,
                                   SDL_Renderer* pRenderer,
+                                  double rotationAngle,
                                   SDL_RendererFlip flip)
 {
     SDL_Rect srcRectangle;
@@ -109,7 +110,7 @@ void TextureManager::drawAnimated(std::string textureID, int destX, int destY,
     //copy the texture to the renderer
     SDL_RenderCopyEx(pRenderer, textureUMap[textureID],//provide key, get value
                      &srcRectangle, &destRectangle,
-                     0, 0, flip);
+                     rotationAngle, 0, flip);
 
 }
 
