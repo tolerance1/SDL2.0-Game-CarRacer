@@ -79,6 +79,11 @@ bool Game::init()
         return false;
     }
 
+    //set game objects parameters
+    object1.setObjectParams("player_car_yellow", 560, 0, 45, 80, 0, 0, 270);
+    object2.setObjectParams("traffic_car_blue", 0, 200, 45, 80, 0, 0, 90);
+    object3.setObjectParams("traffic_car_orange", 0, 300, 45, 80, 0, 0, 90);
+
 
 
     cout << "Starting the game loop!" << endl;
@@ -105,8 +110,11 @@ void Game::getInput()
 
 void Game::update()
 {
-    TextureManager::getpTextureManager()->setcurrentFrame()
-    = int(((SDL_GetTicks() / 100) % 2));
+    //update game objects destination coordinates and current frame
+    object1.updateObjectParams();
+    object2.updateObjectParams();
+    object3.updateObjectParams();
+
 }
 
 void Game::render()
@@ -117,20 +125,10 @@ void Game::render()
     SDL_RenderClear(pRenderer);
 
 
-    //draw the created textures
-    int X = TextureManager::getpTextureManager()->getcurrentFrame();
-
-    TextureManager::getpTextureManager()->drawStatic("player_car_yellow", 100, 100,
-                                                     45, 80,
-                                                     pRenderer);
-    TextureManager::getpTextureManager()->drawAnimated("traffic_car_blue", 200, 100,
-                                                     45, 80,
-                                                     0, X,
-                                                     pRenderer);
-    TextureManager::getpTextureManager()->drawAnimated("traffic_car_orange", 300, 100,
-                                                     45, 80,
-                                                     0, X,
-                                                     pRenderer, SDL_FLIP_VERTICAL);
+    //draw game objects
+    object1.drawObject(pRenderer);
+    object2.drawObject(pRenderer);
+    object3.drawObject(pRenderer);
 
 
     //update the screen with rendering performed
