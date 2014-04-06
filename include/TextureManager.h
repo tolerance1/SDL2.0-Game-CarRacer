@@ -21,21 +21,14 @@ class TextureManager
                           int width, int height,
                           int currentRow, int currentFrame,
                           SDL_Renderer* pRenderer,
-                          SDL_RendererFlip flip = SDL_FLIP_NONE);
+                          double rotationAngle,
+                          SDL_RendererFlip flip);
         void DestroyTextures();
 
 
         static TextureManager* getpTextureManager();//create a single instance
 
-        const int& getcurrentRow() const {return currentRow;}
-        const int& getcurrentFrame() const {return currentFrame;}
-
-        int& setcurrentRow() {return currentRow;}
-        int& setcurrentFrame() {return currentFrame;}
-
     private:
-        int currentRow;
-        int currentFrame;
         static TextureManager* pTextureManager;//pointer to the instance
 
         //container for textures
