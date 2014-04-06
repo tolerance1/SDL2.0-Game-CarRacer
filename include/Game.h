@@ -3,6 +3,8 @@
 
 #include "SDL.h"
 
+#include "Player.h"
+
 class Game
 {
     public:
@@ -24,6 +26,11 @@ class Game
         SDL_Renderer* pRenderer;
         bool bRunning;
         static Game* pGame;//pointer to the instance
+
+        //game objects
+        GameObject object1;
+        Player object2;
+        Player object3;
 
         Game();//default constructor
         Game(const Game& rhs);//copy constructor
