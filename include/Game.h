@@ -3,7 +3,8 @@
 
 #include "SDL.h"
 
-#include "Player.h"
+#include "GameObject.h"
+#include <vector>
 
 class Game
 {
@@ -27,10 +28,8 @@ class Game
         bool bRunning;
         static Game* pGame;//pointer to the instance
 
-        //game objects
-        GameObject object1;
-        Player object2;
-        Player object3;
+        //container for game objects
+        std::vector<GameObject*> gameObjects;
 
         Game();//default constructor
         Game(const Game& rhs);//copy constructor
