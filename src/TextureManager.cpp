@@ -28,6 +28,17 @@ TextureManager::TextureManager()
 TextureManager::~TextureManager()
 {
     cout << "_TextureManager destructor" << endl;
+
+    //release the textures
+    std::unordered_map<std::string, SDL_Texture*>::iterator umapIterator;
+
+    for(umapIterator = textureUMap.begin();
+        umapIterator != textureUMap.end();
+        ++umapIterator)
+    {
+        cout << "SDL_DestroyTexture(" << umapIterator->first << ")" << endl;
+        SDL_DestroyTexture(umapIterator->second);//deletes the texture pointed to
+    }
 }
 
 //load image, create texture, store the texture
@@ -59,35 +70,9 @@ bool TextureManager::createTexture(std::string fileName, std::string textureID,
     return false;
 }
 
-//retrieve a static texture from u_map and copy it to the renderer
-//int destX, int destY - the coordinates for the destination rectangle
-void TextureManager::drawStatic(std::string textureID, int destX, int destY,
-                                int width, int height,
-                                SDL_Renderer* pRenderer,
-                                SDL_RendererFlip flip)
-{
-    SDL_Rect srcRectangle;
-    SDL_Rect destRectangle;
-
-    //set dimensions
-    srcRectangle.w = destRectangle.w = width;
-    srcRectangle.h = destRectangle.h = height;
-
-    //set coordinates
-    srcRectangle.x = 0;
-    srcRectangle.y = 0;
-    destRectangle.x = destX;
-    destRectangle.y = destY;
-
-    //copy the texture to the renderer
-    SDL_RenderCopyEx(pRenderer, textureUMap[textureID],//provide key, get value
-                     &srcRectangle, &destRectangle,
-                     0, 0, flip);
-
-}
-
 //retrieve an animated texture from u_map and copy it to the renderer
-void TextureManager::drawAnimated(std::string textureID, int destX, int destY,
+//int destX, int destY - the coordinates for the destination rectangle
+void TextureManager::drawTexture(std::string textureID, int destX, int destY,
                                   int width, int height,
                                   int currentRow, int currentFrame,
                                   SDL_Renderer* pRenderer,
@@ -111,19 +96,5 @@ void TextureManager::drawAnimated(std::string textureID, int destX, int destY,
     SDL_RenderCopyEx(pRenderer, textureUMap[textureID],//provide key, get value
                      &srcRectangle, &destRectangle,
                      rotationAngle, 0, flip);
-
-}
-
-void TextureManager::DestroyTextures()
-{
-    std::unordered_map<std::string, SDL_Texture*>::iterator umapIterator;
-
-    for(umapIterator = textureUMap.begin();
-        umapIterator != textureUMap.end();
-        ++umapIterator)
-    {
-        cout << "SDL_DestroyTexture(" << umapIterator->first << ")" << endl;
-        SDL_DestroyTexture(umapIterator->second);//deletes the texture pointed to
-    }
 
 }
