@@ -40,17 +40,17 @@ void GameObject::setObjectParams(std::string textureID, int destX, int destY,
 
 void GameObject::drawObject(SDL_Renderer* pRenderer)
 {
-    TextureManager::getpTextureManager()->drawAnimated(m_textureID, m_x, m_y,
-                                                       m_width, m_height,
-                                                       m_currentRow, m_currentFrame,
-                                                       pRenderer, m_rotationAngle, m_flip);
+    TextureManager::getpTextureManager()->drawTexture(m_textureID, m_x, m_y,
+                                                      m_width, m_height,
+                                                      m_currentRow, m_currentFrame,
+                                                      pRenderer, m_rotationAngle, m_flip);
 }
 
 void GameObject::updateObjectParams()
 {
     m_x -= 1;
     m_y += 1;
-    m_currentFrame = int(((SDL_GetTicks() / 100) % 2));
+    m_currentFrame = int(((SDL_GetTicks() / 100) % 2));//return an offset
 }
 
 void GameObject::clean()
