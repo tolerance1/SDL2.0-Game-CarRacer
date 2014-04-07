@@ -11,14 +11,14 @@ class GameObject
         GameObject();
         virtual ~GameObject();
 
-        void setObjectParams(std::string textureID, int destX, int destY,
-                             int width, int height,
-                             int currentRow, int currentFrame,
-                             double rotationAngle = 0,
-                             SDL_RendererFlip flip = SDL_FLIP_NONE);
-        void drawObject(SDL_Renderer* pRenderer);
-        void updateObjectParams();
-        void clean();
+        virtual void setObjectParams(std::string textureID, int destX, int destY,
+                                     int width, int height,
+                                     int currentRow, int currentFrame,
+                                     double rotationAngle = 0,
+                                     SDL_RendererFlip flip = SDL_FLIP_NONE);
+        virtual void drawObject(SDL_Renderer* pRenderer);
+        virtual void updateObjectParams();
+        virtual void clean();
 
     protected:
         std::string m_textureID;
