@@ -4,36 +4,26 @@
 using std::cout;
 using std::endl;
 
-Player::Player()
+Player::Player(const SetObjectParams* pInput)
+: GameObject(pInput)
 {
-    cout << "_Player constructor" << endl;
+    cout << "_5C Player" << endl;
 }
 
 Player::~Player()
 {
-    cout << "_Player destructor" << endl;
+    cout << "_5D Player" << endl;
 }
 
-void Player::setObjectParams(std::string textureID, int destX, int destY,
-                             int width, int height,
-                             int currentRow, int currentFrame,
-                             double rotationAngle,
-                             SDL_RendererFlip flip)
+void Player::drawObject()
 {
-    //reuse functionality
-    GameObject::setObjectParams(textureID, destX, destY, width, height,
-                                currentRow, currentFrame,
-                                rotationAngle, flip);
-}
-
-void Player::drawObject(SDL_Renderer* pRenderer)
-{
-    GameObject::drawObject(pRenderer);
+    GameObject::drawObject();
 }
 
 void Player::updateObjectParams()
 {
-    m_x += 1;
+    m_x -= 1;
+    m_y += 1;
     m_currentFrame = int(((SDL_GetTicks() / 100) % 2));
 }
 
