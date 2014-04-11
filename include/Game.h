@@ -2,8 +2,8 @@
 #define GAME_H
 
 #include "SDL.h"
-
 #include "GameObject.h"
+
 #include <vector>
 
 class Game
@@ -17,10 +17,11 @@ class Game
         void render();
         void clean();
 
-        const bool& getbRunning() const {return bRunning;}
+        SDL_Renderer* getpRenderer() const {return pRenderer; }
+        bool getbRunning() const {return bRunning; }
         static Game* getpGame();//create a single instance
 
-        bool& setbRunning() {return bRunning;}
+        bool& setbRunning() {return bRunning; }
 
     private:
         SDL_Window* pWindow;
