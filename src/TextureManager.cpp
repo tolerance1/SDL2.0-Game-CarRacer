@@ -22,12 +22,12 @@ TextureManager* TextureManager::getpTextureManager()
 
 TextureManager::TextureManager()
 {
-    cout << "_TextureManager constructor" << endl;
+    cout << "_2C TextureManager" << endl;
 }
 
 TextureManager::~TextureManager()
 {
-    cout << "_TextureManager destructor" << endl;
+    cout << "_2D TextureManager" << endl;
 
     //release the textures
     std::unordered_map<std::string, SDL_Texture*>::iterator umapIterator;
@@ -43,14 +43,14 @@ TextureManager::~TextureManager()
 
 //load image, create texture, store the texture
 bool TextureManager::createTexture(std::string fileName, std::string textureID,
-                                 SDL_Renderer* pRenderer)
+                                   SDL_Renderer* pRenderer)
 {
     //create surface first
     SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
 
     if(pTempSurface == NULL)//check for success
     {
-        cout << "IMG_Load: " << IMG_GetError() << endl;
+        cout << "IMG_Load(): " << IMG_GetError() << endl;
         return false;
     }
 
@@ -70,14 +70,14 @@ bool TextureManager::createTexture(std::string fileName, std::string textureID,
     return false;
 }
 
-//retrieve an animated texture from u_map and copy it to the renderer
+//retrieve a texture from u_map and copy it to the renderer
 //int destX, int destY - the coordinates for the destination rectangle
 void TextureManager::drawTexture(std::string textureID, int destX, int destY,
-                                  int width, int height,
-                                  int currentRow, int currentFrame,
-                                  SDL_Renderer* pRenderer,
-                                  double rotationAngle,
-                                  SDL_RendererFlip flip)
+                                 int width, int height,
+                                 int currentRow, int currentFrame,
+                                 SDL_Renderer* pRenderer,
+                                 double rotationAngle,
+                                 SDL_RendererFlip flip)
 {
     SDL_Rect srcRectangle;
     SDL_Rect destRectangle;
