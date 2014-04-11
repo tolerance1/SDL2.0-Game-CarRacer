@@ -1,5 +1,9 @@
 #include "Game.h"
 
+#include <iostream>
+using std::cout;
+using std::endl;
+
 //REMOVE THIS WHEN RELEASING THE GAME
 #include "Windows.h"
 #include <stdio.h>
@@ -14,16 +18,22 @@ int main(int argc, char* argv[])
 
 
     //create the game object
-    Game::getpGame()->setbRunning() = Game::getpGame()->init();
-
-    while (Game::getpGame()->getbRunning() )
+    if (Game::getpGame()->init() )
     {
-        Game::getpGame()->getInput();
-        Game::getpGame()->update();
-        Game::getpGame()->render();
+        Game::getpGame()->setbRunning() = true;
 
-        SDL_Delay(10);
+        while (Game::getpGame()->getbRunning() )
+            {
+                Game::getpGame()->getInput();
+                Game::getpGame()->update();
+                Game::getpGame()->render();
 
+                SDL_Delay(10);
+            }
+    }
+    else
+    {
+        cout << "Game start error: " << SDL_GetError() << endl;
     }
 
     Game::getpGame()->clean();
