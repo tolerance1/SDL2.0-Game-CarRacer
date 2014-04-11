@@ -1,56 +1,52 @@
 #include "GameObject.h"
 
 #include "TextureManager.h"
+#include "Game.h"
 
 #include <iostream>
 using std::cout;
 using std::endl;
 
-GameObject::GameObject()
+GameObject::GameObject(const SetObjectParams* pInput)
 {
-    cout << "_GameObject constructor" << endl;
+    cout << "_4C GameObject" << endl;
+
+    m_textureID = pInput->getTextureID();
+
+    m_x = pInput->getX();
+    m_y = pInput->getY();
+
+    m_width = pInput->getWidth();
+    m_height = pInput->getHeight();
+
+    m_currentRow = pInput->getCurrentRow();
+    m_currentFrame = pInput->getCurrentFrame();
+
+    m_rotationAngle = pInput->getRotationAngle();
+
+    m_flip = pInput->getFlip();
+
+    //release parameters object
+    delete pInput;
 }
 
 GameObject::~GameObject()
 {
-    cout << "_GameObject destructor" << endl;
+    cout << "_4D GameObject" << endl;
 }
 
-void GameObject::setObjectParams(std::string textureID, int destX, int destY,
-                                 int width, int height,
-                                 int currentRow, int currentFrame,
-                                 double rotationAngle,
-                                 SDL_RendererFlip flip)
-{
-    m_textureID = textureID;
-
-    m_x = destX;
-    m_y = destY;
-
-    m_width = width;
-    m_height = height;
-
-    m_currentRow = currentRow;
-    m_currentFrame = currentFrame;
-
-    m_rotationAngle = rotationAngle;
-
-    m_flip = flip;
-}
-
-void GameObject::drawObject(SDL_Renderer* pRenderer)
+void GameObject::drawObject()
 {
     TextureManager::getpTextureManager()->drawTexture(m_textureID, m_x, m_y,
                                                       m_width, m_height,
                                                       m_currentRow, m_currentFrame,
-                                                      pRenderer, m_rotationAngle, m_flip);
+                                                      Game::getpGame()->getpRenderer(),
+                                                      m_rotationAngle, m_flip);
 }
 
 void GameObject::updateObjectParams()
 {
-    m_x -= 1;
-    m_y += 1;
-    m_currentFrame = int(((SDL_GetTicks() / 100) % 2));//return an offset
+
 }
 
 void GameObject::clean()

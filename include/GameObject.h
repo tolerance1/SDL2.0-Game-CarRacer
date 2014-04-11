@@ -1,24 +1,22 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+#include "GameObjectABC.h"
+
 #include <string>
 
 #include "SDL.h"
+#include "SetObjectParams.h"
 
-class GameObject
+class GameObject : public GameObjectABC
 {
     public:
-        GameObject();
-        virtual ~GameObject();
+        GameObject(const SetObjectParams* pInput);
+        ~GameObject();
 
-        virtual void setObjectParams(std::string textureID, int destX, int destY,
-                                     int width, int height,
-                                     int currentRow, int currentFrame,
-                                     double rotationAngle = 0,
-                                     SDL_RendererFlip flip = SDL_FLIP_NONE);
-        virtual void drawObject(SDL_Renderer* pRenderer);
-        virtual void updateObjectParams();
-        virtual void clean();
+        void drawObject();
+        void updateObjectParams();
+        void clean();
 
     protected:
         std::string m_textureID;
@@ -32,7 +30,7 @@ class GameObject
         int m_currentFrame;
         int m_currentRow;
 
-        double m_rotationAngle;//applied to dest. rect.
+        double m_rotationAngle;//rotate dest. rect.
 
         SDL_RendererFlip m_flip;
 };
