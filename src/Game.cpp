@@ -2,6 +2,7 @@
 
 #include "TextureManager.h"
 #include "Player.h"
+#include "Enemy.h"
 
 #include <iostream>
 using std::cout;
@@ -23,12 +24,12 @@ Game* Game::getpGame()
 
 Game::Game()
 {
-    cout << "_Game constructor" << endl;
+    cout << "_1C Game" << endl;
 }
 
 Game::~Game()
 {
-    cout << "_Game destructor" << endl;
+    cout << "_1D Game" << endl;
 
     //release game objects
     for(size_t Index = 0; Index != gameObjects.size(); ++Index)
@@ -91,14 +92,9 @@ bool Game::init()
     }
 
     //create objects and push them into container
-    gameObjects.push_back(new GameObject());
-    gameObjects.push_back(new Player());
-    gameObjects.push_back(new Player());
-
-    //set game objects parameters
-    gameObjects[0]->setObjectParams("player_car_yellow", 560, 0, 45, 80, 0, 0, 270);
-    gameObjects[1]->setObjectParams("traffic_car_blue", 0, 200, 45, 80, 0, 0, 90);
-    gameObjects[2]->setObjectParams("traffic_car_orange", 0, 300, 45, 80, 0, 0, 90);
+    gameObjects.push_back(new Player(new SetObjectParams("player_car_yellow", 560, 0, 45, 80, 0, 0, 270)));
+    gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_blue", 0, 200, 45, 80, 0, 0, 90)));
+    gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_orange", 0, 300, 45, 80, 0, 0, 90)));
 
 
 
@@ -145,7 +141,7 @@ void Game::render()
     //draw game objects
     for(size_t Index = 0; Index != gameObjects.size(); ++Index)
     {
-        gameObjects[Index]->drawObject(pRenderer);
+        gameObjects[Index]->drawObject();
     }
 
 
@@ -157,9 +153,10 @@ void Game::render()
 void Game::clean()
 {
     //ALWAYS REMEMBER TO CLEAN AND DELETE POINTERS BEFORE EXIT!!!
+    cout << "--------------------" << endl;
 
     delete TextureManager::getpTextureManager();//release the TextureManager object memory
     delete pGame;//release the Game object memory
-    SDL_Delay(5000);
+    SDL_Delay(60000);
     SDL_Quit();
 }
