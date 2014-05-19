@@ -8,13 +8,11 @@ using std::cout;
 using std::endl;
 
 GameObject::GameObject(const SetObjectParams* pInput)
+: vecPosition(pInput->getX(), pInput->getY()), vecVelocity(0, 0), vecAcceleration(0, 0)
 {
-    cout << "_4C GameObject" << endl;
+    cout << " 4 C GameObject" << endl;
 
     m_textureID = pInput->getTextureID();
-
-    m_x = pInput->getX();
-    m_y = pInput->getY();
 
     m_width = pInput->getWidth();
     m_height = pInput->getHeight();
@@ -32,12 +30,13 @@ GameObject::GameObject(const SetObjectParams* pInput)
 
 GameObject::~GameObject()
 {
-    cout << "_4D GameObject" << endl;
+    cout << " 4 D GameObject" << endl;
 }
 
 void GameObject::drawObject()
 {
-    TextureManager::getpTextureManager()->drawTexture(m_textureID, m_x, m_y,
+    TextureManager::getpTextureManager()->drawTexture(m_textureID,
+                                                      (int)vecPosition.getX(), (int)vecPosition.getY(),
                                                       m_width, m_height,
                                                       m_currentRow, m_currentFrame,
                                                       Game::getpGame()->getpRenderer(),
@@ -46,7 +45,8 @@ void GameObject::drawObject()
 
 void GameObject::updateObjectParams()
 {
-
+    vecVelocity += vecAcceleration;
+    vecPosition += vecVelocity;
 }
 
 void GameObject::clean()
