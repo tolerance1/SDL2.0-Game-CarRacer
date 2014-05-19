@@ -7,12 +7,12 @@ using std::endl;
 Player::Player(const SetObjectParams* pInput)
 : GameObject(pInput)
 {
-    cout << "_5C Player" << endl;
+    cout << " 5 C Player" << endl;
 }
 
 Player::~Player()
 {
-    cout << "_5D Player" << endl;
+    cout << " 5 D Player" << endl;
 }
 
 void Player::drawObject()
@@ -22,9 +22,12 @@ void Player::drawObject()
 
 void Player::updateObjectParams()
 {
-    m_x -= 1;
-    m_y += 1;
+    vecVelocity.setY(1);
+    vecAcceleration.setX(-0.01);
+
     m_currentFrame = int(((SDL_GetTicks() / 100) % 2));
+
+    GameObject::updateObjectParams();
 }
 
 void Player::clean()

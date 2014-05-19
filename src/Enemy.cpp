@@ -7,12 +7,12 @@ using std::endl;
 Enemy::Enemy(const SetObjectParams* pInput)
 : GameObject(pInput)
 {
-    cout << "_6C Enemy" << endl;
+    cout << " 6 C Enemy" << endl;
 }
 
 Enemy::~Enemy()
 {
-    cout << "_6D Enemy" << endl;
+    cout << " 6 D Enemy" << endl;
 }
 
 void Enemy::drawObject()
@@ -22,8 +22,11 @@ void Enemy::drawObject()
 
 void Enemy::updateObjectParams()
 {
-    m_x += 1;
+    vecAcceleration.setX(0.02);
+
     m_currentFrame = int(((SDL_GetTicks() / 100) % 2));
+
+    GameObject::updateObjectParams();
 }
 
 void Enemy::clean()
