@@ -13,10 +13,10 @@ SetObjectParams::SetObjectParams(std::string textureID, int destX, int destY,
 m_currentFrame(currentFrame), m_currentRow(currentRow),
 m_rotationAngle(rotationAngle), m_flip(flip)
 {
-    cout << "_7C SetObjectParams" << endl;
+    cout << " 7 C SetObjectParams" << endl;
 }
 
 SetObjectParams::~SetObjectParams()
 {
-    cout << "_7D SetObjectParams" << endl;
+    cout << " 7 D SetObjectParams" << endl;
 }

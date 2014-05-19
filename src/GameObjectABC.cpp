@@ -6,10 +6,10 @@ using std::endl;
 
 GameObjectABC::GameObjectABC()
 {
-    cout << "_3C GameObjectABC" << endl;
+    cout << " 3 C GameObjectABC" << endl;
 }
 
 GameObjectABC::~GameObjectABC()
 {
-    cout << "_3D GameObjectABC" << endl;
+    cout << " 3 D GameObjectABC" << endl;
 }

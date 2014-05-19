@@ -24,12 +24,12 @@ Game* Game::getpGame()
 
 Game::Game()
 {
-    cout << "_1C Game" << endl;
+    cout << " 1 C Game" << endl;
 }
 
 Game::~Game()
 {
-    cout << "_1D Game" << endl;
+    cout << " 1 D Game" << endl;
 
     //release game objects
     for(size_t Index = 0; Index != gameObjects.size(); ++Index)
@@ -153,7 +153,6 @@ void Game::render()
 void Game::clean()
 {
     //ALWAYS REMEMBER TO CLEAN AND DELETE POINTERS BEFORE EXIT!!!
-    cout << "--------------------" << endl;
 
     delete TextureManager::getpTextureManager();//release the TextureManager object memory
     delete pGame;//release the Game object memory

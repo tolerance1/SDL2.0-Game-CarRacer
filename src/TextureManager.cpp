@@ -22,12 +22,12 @@ TextureManager* TextureManager::getpTextureManager()
 
 TextureManager::TextureManager()
 {
-    cout << "_2C TextureManager" << endl;
+    cout << " 2 C TextureManager" << endl;
 }
 
 TextureManager::~TextureManager()
 {
-    cout << "_2D TextureManager" << endl;
+    cout << " 2 D TextureManager" << endl;
 
     //release the textures
     std::unordered_map<std::string, SDL_Texture*>::iterator umapIterator;
