@@ -3,10 +3,8 @@
 
 #include "GameObjectABC.h"
 
-#include <string>
-
-#include "SDL.h"
 #include "SetObjectParams.h"
+#include "Vector2D.h"
 
 class GameObject : public GameObjectABC
 {
@@ -21,8 +19,9 @@ class GameObject : public GameObjectABC
     protected:
         std::string m_textureID;
 
-        int m_x;//dest. coord. X
-        int m_y;//dest. coord. Y
+        Vector2D vecPosition;//dest. coord. X, Y
+        Vector2D vecVelocity;
+        Vector2D vecAcceleration;
 
         int m_width;
         int m_height;
