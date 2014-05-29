@@ -3,6 +3,7 @@
 #include "TextureManager.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "InputHandler.h"
 
 #include <iostream>
 using std::cout;
@@ -105,19 +106,9 @@ bool Game::init()
 
 void Game::getInput()
 {
-    SDL_Event event;//events are placed into this union of structs
-    if(SDL_PollEvent(&event))//returns 1 if an event has been placed into the union
-    {
-        switch(event.type)//check the event type
-        {
-            case SDL_QUIT:
-                bRunning = false;
-                break;
+    //create the InputHandler object
+    InputHandler::getpInputHandler()->updateInputStates();
 
-            default:
-                break;
-        }
-    }
 }
 
 void Game::update()
@@ -154,6 +145,7 @@ void Game::clean()
 {
     //ALWAYS REMEMBER TO CLEAN AND DELETE POINTERS BEFORE EXIT!!!
 
+    delete InputHandler::getpInputHandler();//release the InputHandler memory
     delete TextureManager::getpTextureManager();//release the TextureManager object memory
     delete pGame;//release the Game object memory
     SDL_Delay(60000);
