@@ -14,7 +14,7 @@ class Vector2D
         void setY(const float Y) {y = Y; }
 
         //distance between two points
-        float vecLength();
+        float vecLength() const;
 
         //add two vectors
         Vector2D operator+ (const Vector2D& v2) const;

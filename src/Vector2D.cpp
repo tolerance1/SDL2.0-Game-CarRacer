@@ -17,7 +17,7 @@ Vector2D::~Vector2D()
     cout << " 8 D Vector2D" << endl;
 }
 
-float Vector2D::vecLength()
+float Vector2D::vecLength() const
 {
     return sqrt(x * x + y * y);
 }
