@@ -13,6 +13,9 @@ class Player : public GameObject
         void updateObjectParams();
         void clean();
 
+    private:
+        void queryMouseStates();
+        void queryKeyStates();
 };
 
 #endif // PLAYER_H
