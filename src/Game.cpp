@@ -9,6 +9,9 @@
 using std::cout;
 using std::endl;
 
+extern const int offsetX = 17;
+extern const int offsetY = -17;
+
 //STATIC VAR INIT
 Game* Game::pGame = nullptr;
 
@@ -93,9 +96,9 @@ bool Game::init()
     }
 
     //create objects and push them into container
-    gameObjects.push_back(new Player(new SetObjectParams("player_car_yellow", 560, 0, 45, 80, 0, 0, 270)));
-    gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_blue", 0, 200, 45, 80, 0, 0, 90)));
-    gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_orange", 0, 300, 45, 80, 0, 0, 90)));
+    gameObjects.push_back(new Player(new SetObjectParams("player_car_yellow", 0 + offsetX, 200 + offsetY, 45, 80, 0, 0, 90)));
+    gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_blue", 0 + offsetX, 100 + offsetY, 45, 80, 0, 0, 90)));
+    gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_orange", 0 + offsetX, 300 + offsetY, 45, 80, 0, 0, 90)));
 
 
 
@@ -106,7 +109,7 @@ bool Game::init()
 
 void Game::getInput()
 {
-    //create the InputHandler object
+    //poll events
     InputHandler::getpInputHandler()->updateInputStates();
 
 }
@@ -145,7 +148,7 @@ void Game::clean()
 {
     //ALWAYS REMEMBER TO CLEAN AND DELETE POINTERS BEFORE EXIT!!!
 
-    delete InputHandler::getpInputHandler();//release the InputHandler memory
+    delete InputHandler::getpInputHandler();//release the InputHandler object memory
     delete TextureManager::getpTextureManager();//release the TextureManager object memory
     delete pGame;//release the Game object memory
     SDL_Delay(60000);
