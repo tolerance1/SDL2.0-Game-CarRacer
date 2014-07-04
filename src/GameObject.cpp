@@ -8,21 +8,21 @@ using std::cout;
 using std::endl;
 
 GameObject::GameObject(const SetObjectParams* pInput)
-: vecPosition(pInput->getX(), pInput->getY()), vecVelocity(0, 0), vecAcceleration(0, 0)
+: Position(pInput->getX(), pInput->getY()), Velocity(0, 0), Acceleration(0, 0)
 {
     cout << " 4 C GameObject" << endl;
 
-    m_textureID = pInput->getTextureID();
+    textureID = pInput->getTextureID();
 
-    m_width = pInput->getWidth();
-    m_height = pInput->getHeight();
+    width = pInput->getWidth();
+    height = pInput->getHeight();
 
-    m_currentRow = pInput->getCurrentRow();
-    m_currentFrame = pInput->getCurrentFrame();
+    currentRow = pInput->getCurrentRow();
+    currentFrame = pInput->getCurrentFrame();
 
-    m_rotationAngle = pInput->getRotationAngle();
+    rotationAngle = pInput->getRotationAngle();
 
-    m_flip = pInput->getFlip();
+    flip = pInput->getFlip();
 
     //release parameters object
     delete pInput;
@@ -35,18 +35,18 @@ GameObject::~GameObject()
 
 void GameObject::drawObject()
 {
-    TextureManager::getpTextureManager()->drawTexture(m_textureID,
-                                                      (int)vecPosition.getX(), (int)vecPosition.getY(),
-                                                      m_width, m_height,
-                                                      m_currentRow, m_currentFrame,
+    TextureManager::getpTextureManager()->drawTexture(textureID,
+                                                      (int)Position.getX(), (int)Position.getY(),
+                                                      width, height,
+                                                      currentRow, currentFrame,
                                                       Game::getpGame()->getpRenderer(),
-                                                      m_rotationAngle, m_flip);
+                                                      rotationAngle, flip);
 }
 
 void GameObject::updateObjectParams()
 {
-    vecVelocity += vecAcceleration;
-    vecPosition += vecVelocity;
+    Velocity += Acceleration;
+    Position += Velocity;
 }
 
 void GameObject::clean()

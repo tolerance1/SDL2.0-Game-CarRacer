@@ -16,31 +16,31 @@ class SetObjectParams
                         SDL_RendererFlip flip = SDL_FLIP_NONE);
         ~SetObjectParams();
 
-        const std::string& getTextureID() const {return m_textureID; }
-        int getX() const {return m_x; }
-        int getY() const {return m_y; }
-        int getWidth() const {return m_width; }
-        int getHeight() const {return m_height; }
-        int getCurrentFrame() const {return m_currentFrame; }
-        int getCurrentRow() const {return m_currentRow; }
-        double getRotationAngle() const {return m_rotationAngle; }
-        SDL_RendererFlip getFlip() const {return m_flip; }
+        const std::string& getTextureID() const {return textureID; }
+        int getX() const {return x; }
+        int getY() const {return y; }
+        int getWidth() const {return width; }
+        int getHeight() const {return height; }
+        int getCurrentFrame() const {return currentFrame; }
+        int getCurrentRow() const {return currentRow; }
+        double getRotationAngle() const {return rotationAngle; }
+        SDL_RendererFlip getFlip() const {return flip; }
 
     private:
-        std::string m_textureID;
+        std::string textureID;
 
-        int m_x;//dest. coord. X
-        int m_y;//dest. coord. Y
+        int x;//dest. coord. X
+        int y;//dest. coord. Y
 
-        int m_width;
-        int m_height;
+        int width;
+        int height;
 
-        int m_currentFrame;
-        int m_currentRow;
+        int currentFrame;
+        int currentRow;
 
-        double m_rotationAngle;//rotate dest. rect.
+        double rotationAngle;//rotate dest. rect.
 
-        SDL_RendererFlip m_flip;
+        SDL_RendererFlip flip;
 };
 
 #endif // SETOBJECTPARAMS_H

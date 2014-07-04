@@ -6,7 +6,7 @@
 #include "Vector2D.h"
 #include "SDL.h"
 
-enum MouseButtons_t {LEFT = 0, MIDDLE = 1, RIGHT = 2};
+enum MouseButtons {LEFT = 0, MIDDLE = 1, RIGHT = 2};
 
 class InputHandler
 {

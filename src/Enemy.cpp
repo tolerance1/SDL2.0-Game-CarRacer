@@ -22,9 +22,9 @@ void Enemy::drawObject()
 
 void Enemy::updateObjectParams()
 {
-    vecAcceleration.setX(0.02);
+    Acceleration.setX(0.02);
 
-    m_currentFrame = int(((SDL_GetTicks() / 100) % 2));
+    currentFrame = int(((SDL_GetTicks() / 100) % 2));
 
     GameObject::updateObjectParams();
 }

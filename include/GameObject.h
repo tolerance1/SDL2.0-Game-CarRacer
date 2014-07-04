@@ -17,21 +17,21 @@ class GameObject : public GameObjectABC
         void clean();
 
     protected:
-        std::string m_textureID;
+        std::string textureID;
 
-        Vector2D vecPosition;//dest. coord. X, Y
-        Vector2D vecVelocity;
-        Vector2D vecAcceleration;
+        Vector2D Position;//dest. coord. X, Y
+        Vector2D Velocity;
+        Vector2D Acceleration;
 
-        int m_width;
-        int m_height;
+        int width;
+        int height;
 
-        int m_currentFrame;
-        int m_currentRow;
+        int currentFrame;
+        int currentRow;
 
-        double m_rotationAngle;//rotate dest. rect.
+        double rotationAngle;//rotate dest. rect.
 
-        SDL_RendererFlip m_flip;
+        SDL_RendererFlip flip;
 };
 
 #endif // GAMEOBJECT_H
