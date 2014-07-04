@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "InputHandler.h"
+#include "MenuState.h"
+#include "PlayState.h"
 
 #include <iostream>
 using std::cout;
@@ -44,6 +46,9 @@ Game::~Game()
     //release SDL-specific objects
     SDL_DestroyRenderer(pRenderer);
     SDL_DestroyWindow(pWindow);
+
+    //release game state machine object
+    delete pGameStateMachine;
 }
 
 bool Game::init()
@@ -100,6 +105,13 @@ bool Game::init()
     gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_blue", 0 + offsetX, 100 + offsetY, 45, 80, 0, 0, 90)));
     gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_orange", 0 + offsetX, 300 + offsetY, 45, 80, 0, 0, 90)));
 
+    //create InputHandler object
+    InputHandler::getpInputHandler();
+
+    //create finite state machine
+    pGameStateMachine = new GameStateMachine();
+    pGameStateMachine->pushState(new MenuState());
+
 
 
     cout << "Starting the game loop!" << endl;
@@ -112,6 +124,16 @@ void Game::getInput()
     //poll events
     InputHandler::getpInputHandler()->updateInputStates();
 
+    //change state
+    if(InputHandler::getpInputHandler()->getKeyState(SDL_SCANCODE_RETURN))
+    {
+        //secure against duplicate object creation on every 'Enter' press
+        if(! (pGameStateMachine->getGameStates().top()->getStateID() == "PLAY"))
+        {
+            pGameStateMachine->changeState(new PlayState());
+        }
+    }
+
 }
 
 void Game::update()
@@ -121,6 +143,9 @@ void Game::update()
     {
         gameObjects[Index]->updateObjectParams();
     }
+
+    //update the current game state
+    pGameStateMachine->updateCurrentState();
 
 }
 
@@ -138,6 +163,8 @@ void Game::render()
         gameObjects[Index]->drawObject();
     }
 
+    //render the current game state
+    pGameStateMachine->renderCurrentState();
 
     //update the screen with rendering performed
     SDL_RenderPresent(pRenderer);
