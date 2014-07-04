@@ -2,7 +2,8 @@
 #define GAME_H
 
 #include "SDL.h"
-#include "GameObject.h"
+#include "GameObjectABC.h"
+#include "GameStateMachine.h"
 
 #include <vector>
 
@@ -24,13 +25,14 @@ class Game
         bool& setbRunning() {return bRunning; }
 
     private:
+        bool bRunning;
         SDL_Window* pWindow;
         SDL_Renderer* pRenderer;
-        bool bRunning;
+        GameStateMachine* pGameStateMachine;
         static Game* pGame;//pointer to the instance
 
         //container for game objects
-        std::vector<GameObject*> gameObjects;
+        std::vector<GameObjectABC*> gameObjects;
 
         Game();//default constructor
         Game(const Game& rhs);//copy constructor
