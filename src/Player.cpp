@@ -1,16 +1,14 @@
 #include "Player.h"
 
 #include "InputHandler.h"
+#include "Game.h"
 
 #include <iostream>
 using std::cout;
 using std::endl;
 
-extern const int offsetX;
-extern const int offsetY;
-
-Player::Player(const SetObjectParams* pInput)
-: GameObject(pInput)
+Player::Player(const SetObjectParams* pInput, PlayPtr pFunc)
+: GameObject(pInput), pPlayCallBack(pFunc)
 {
     cout << " 5 C Player" << endl;
 }
@@ -27,10 +25,16 @@ void Player::drawObject()
 
 void Player::queryMouseStates()
 {
-    if(InputHandler::getpInputHandler()->getMouseButtonState(LEFT))
+    if(InputHandler::getpInputHandler()->getMouseButtonState(RIGHT))
     {
-        Position.setX(0 + offsetX);
-        Position.setY(200 + offsetY);
+        Position.setX(0);
+        Position.setY(200);
+    }
+
+    if(InputHandler::getpInputHandler()->getMouseButtonState(MIDDLE))
+    {
+        Game::getpGame()->getpGameStateMachine()->setbPendingChanges() = true;
+        Game::getpGame()->getpGameStateMachine()->setpPlayCallBack() = pPlayCallBack;
     }
 
 }
@@ -68,7 +72,7 @@ void Player::updateObjectParams()
     queryMouseStates();
     queryKeyStates();
 
-    currentFrame = int(((SDL_GetTicks() / 100) % 2));
+    currentFrame = int(((SDL_GetTicks() / 100) % numFrames));
 
     GameObject::updateObjectParams();
 }
