@@ -24,7 +24,7 @@ void Enemy::updateObjectParams()
 {
     Acceleration.setX(0.02);
 
-    currentFrame = int(((SDL_GetTicks() / 100) % 2));
+    currentFrame = int(((SDL_GetTicks() / 100) % numFrames));
 
     GameObject::updateObjectParams();
 }
