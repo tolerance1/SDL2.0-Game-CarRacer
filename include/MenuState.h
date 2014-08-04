@@ -3,6 +3,10 @@
 
 #include "GameStateABC.h"
 
+#include "GameObjectABC.h"
+
+#include <vector>
+
 class MenuState : public GameStateABC
 {
     public:
@@ -15,10 +19,17 @@ class MenuState : public GameStateABC
         bool onEnter();
         bool onExit();
 
-        std::string getStateID() const {return menuID; }
+        const std::string& getStateID() const {return menuID; }
 
     private:
         static const std::string menuID;
+
+        //container for game objects
+        std::vector<GameObjectABC*> gameObjects;
+
+        //call back functions
+        void switchToPlay();
+        void exitFromGame();
 };
 
 #endif // MENUSTATE_H
