@@ -2,10 +2,7 @@
 #define GAME_H
 
 #include "SDL.h"
-#include "GameObjectABC.h"
 #include "GameStateMachine.h"
-
-#include <vector>
 
 class Game
 {
@@ -18,6 +15,7 @@ class Game
         void render();
         void clean();
 
+        GameStateMachine* getpGameStateMachine() const {return pGameStateMachine; }
         SDL_Renderer* getpRenderer() const {return pRenderer; }
         bool getbRunning() const {return bRunning; }
         static Game* getpGame();//create a single instance
@@ -30,9 +28,6 @@ class Game
         SDL_Renderer* pRenderer;
         GameStateMachine* pGameStateMachine;
         static Game* pGame;//pointer to the instance
-
-        //container for game objects
-        std::vector<GameObjectABC*> gameObjects;
 
         Game();//default constructor
         Game(const Game& rhs);//copy constructor
