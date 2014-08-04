@@ -1,18 +1,12 @@
 #include "Game.h"
 
 #include "TextureManager.h"
-#include "Player.h"
-#include "Enemy.h"
 #include "InputHandler.h"
 #include "MenuState.h"
-#include "PlayState.h"
 
 #include <iostream>
 using std::cout;
 using std::endl;
-
-extern const int offsetX = 17;
-extern const int offsetY = -17;
 
 //STATIC VAR INIT
 Game* Game::pGame = nullptr;
@@ -36,12 +30,6 @@ Game::Game()
 Game::~Game()
 {
     cout << " 1 D Game" << endl;
-
-    //release game objects
-    for(size_t Index = 0; Index != gameObjects.size(); ++Index)
-    {
-        delete gameObjects[Index];
-    }
 
     //release SDL-specific objects
     SDL_DestroyRenderer(pRenderer);
@@ -80,31 +68,6 @@ bool Game::init()
 
 
 
-    //create textures
-    if(! TextureManager::getpTextureManager()->createTexture("images/Renault-Top_1.png",
-                                                             "player_car_yellow",
-                                                             pRenderer) )
-    {
-        return false;//don't start the loop
-    }
-    if(! TextureManager::getpTextureManager()->createTexture("images/Renault-Top_2.png",
-                                                             "traffic_car_blue",
-                                                             pRenderer) )
-    {
-        return false;
-    }
-    if(! TextureManager::getpTextureManager()->createTexture("images/Renault-Top_3.png",
-                                                             "traffic_car_orange",
-                                                             pRenderer) )
-    {
-        return false;
-    }
-
-    //create objects and push them into container
-    gameObjects.push_back(new Player(new SetObjectParams("player_car_yellow", 0 + offsetX, 200 + offsetY, 45, 80, 0, 0, 90)));
-    gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_blue", 0 + offsetX, 100 + offsetY, 45, 80, 0, 0, 90)));
-    gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_orange", 0 + offsetX, 300 + offsetY, 45, 80, 0, 0, 90)));
-
     //create InputHandler object
     InputHandler::getpInputHandler();
 
@@ -124,26 +87,10 @@ void Game::getInput()
     //poll events
     InputHandler::getpInputHandler()->updateInputStates();
 
-    //change state
-    if(InputHandler::getpInputHandler()->getKeyState(SDL_SCANCODE_RETURN))
-    {
-        //secure against duplicate object creation on every 'Enter' press
-        if(! (pGameStateMachine->getGameStates().top()->getStateID() == "PLAY"))
-        {
-            pGameStateMachine->changeState(new PlayState());
-        }
-    }
-
 }
 
 void Game::update()
 {
-    //update game objects destination coordinates and current frame
-    for(size_t Index = 0; Index != gameObjects.size(); ++Index)
-    {
-        gameObjects[Index]->updateObjectParams();
-    }
-
     //update the current game state
     pGameStateMachine->updateCurrentState();
 
@@ -157,14 +104,9 @@ void Game::render()
     SDL_RenderClear(pRenderer);
 
 
-    //draw game objects
-    for(size_t Index = 0; Index != gameObjects.size(); ++Index)
-    {
-        gameObjects[Index]->drawObject();
-    }
-
     //render the current game state
     pGameStateMachine->renderCurrentState();
+
 
     //update the screen with rendering performed
     SDL_RenderPresent(pRenderer);
