@@ -41,28 +41,29 @@ void GameStateMachine::popState()
 
 void GameStateMachine::changeState(GameStateABC* pState)
 {
-    if(! gameStates.empty())
+    //empty the stack
+    while(! gameStates.empty())
     {
-        if(gameStates.top()->getStateID() == pState->getStateID())
-        {
-            return;//do nothing
-        }
-
-        //pop current state
         if(gameStates.top()->onExit())
         {
             delete gameStates.top();
             gameStates.pop();
         }
-
-        //add new state
-        gameStates.push(pState);
-        gameStates.top()->onEnter();
     }
+
+    //add new state
+    gameStates.push(pState);
+    gameStates.top()->onEnter();
 }
 
 void GameStateMachine::updateCurrentState()
 {
+    if(bPendingChanges)
+    {
+        applyPendingChanges();
+        bPendingChanges = false;
+    }
+
     if(! gameStates.empty())
     {
         gameStates.top()->update();
@@ -74,5 +75,31 @@ void GameStateMachine::renderCurrentState()
     if(! gameStates.empty())
     {
         gameStates.top()->render();
+    }
+}
+
+void GameStateMachine::applyPendingChanges()
+{
+    const std::string& StateID = getGameStates().top()->getStateID();
+
+    if(StateID == "MENU")
+    {
+        ( static_cast<MenuState*>(getGameStates().top()) ->* pMenuCallBack )();
+        return;
+    }
+    if(StateID == "PLAY")
+    {
+        ( static_cast<PlayState*>(getGameStates().top()) ->* pPlayCallBack )();
+        return;
+    }
+    if(StateID == "PAUSE")
+    {
+        ( static_cast<PauseState*>(getGameStates().top()) ->* pPauseCallBack )();
+        return;
+    }
+    if(StateID == "GAMEOVER")
+    {
+        ( static_cast<GameOverState*>(getGameStates().top()) ->* pGOverCallBack )();
+        return;
     }
 }
