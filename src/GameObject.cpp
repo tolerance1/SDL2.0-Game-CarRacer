@@ -20,6 +20,8 @@ GameObject::GameObject(const SetObjectParams* pInput)
     currentRow = pInput->getCurrentRow();
     currentFrame = pInput->getCurrentFrame();
 
+    numFrames = pInput->getNumFrames();
+
     rotationAngle = pInput->getRotationAngle();
 
     flip = pInput->getFlip();

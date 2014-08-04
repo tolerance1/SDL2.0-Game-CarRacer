@@ -16,6 +16,10 @@ class GameObject : public GameObjectABC
         void updateObjectParams();
         void clean();
 
+        const Vector2D& getPosition() const {return Position; }
+        int getWidth() const {return width; }
+        int getHeight() const {return height; }
+
     protected:
         std::string textureID;
 
@@ -28,6 +32,8 @@ class GameObject : public GameObjectABC
 
         int currentFrame;
         int currentRow;
+
+        int numFrames;
 
         double rotationAngle;//rotate dest. rect.
 
