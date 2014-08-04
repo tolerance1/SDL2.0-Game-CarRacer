@@ -13,12 +13,15 @@ class TextureManager
 
         bool createTexture(std::string fileName, std::string textureID,
                            SDL_Renderer* pRenderer);
-        void drawTexture(std::string id, int destX, int destY,
+
+        void drawTexture(std::string textureID, int destX, int destY,
                          int width, int height,
                          int currentRow, int currentFrame,
                          SDL_Renderer* pRenderer,
                          double rotationAngle,
                          SDL_RendererFlip flip);
+
+        void destroyTexture(std::string textureID);
 
         static TextureManager* getpTextureManager();//create a single instance
 

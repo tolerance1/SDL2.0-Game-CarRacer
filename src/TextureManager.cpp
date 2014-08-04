@@ -30,14 +30,11 @@ TextureManager::~TextureManager()
     cout << " 2 D TextureManager" << endl;
 
     //release the textures
-    std::unordered_map<std::string, SDL_Texture*>::iterator umapIterator;
-
-    for(umapIterator = textureUMap.begin();
-        umapIterator != textureUMap.end();
-        ++umapIterator)
+    while(! textureUMap.empty())
     {
-        cout << "SDL_DestroyTexture(" << umapIterator->first << ")" << endl;
-        SDL_DestroyTexture(umapIterator->second);//deletes the texture pointed to
+        cout << "SDL_DestroyTexture(" << textureUMap.begin()->first << ")" << endl;
+        SDL_DestroyTexture(textureUMap.begin()->second);//deletes the texture pointed to
+        textureUMap.erase(textureUMap.begin());
     }
 }
 
@@ -87,8 +84,8 @@ void TextureManager::drawTexture(std::string textureID, int destX, int destY,
     srcRectangle.h = destRectangle.h = height;
 
     //set coordinates
-    srcRectangle.x = width * currentFrame;//select the frame (45 * 0)
-    srcRectangle.y = height * currentRow;//select the row (80 * 0)
+    srcRectangle.x = width * currentFrame;//select the frame (80 * 0)
+    srcRectangle.y = height * currentRow;//select the row (45 * 0)
     destRectangle.x = destX;
     destRectangle.y = destY;
 
@@ -97,4 +94,10 @@ void TextureManager::drawTexture(std::string textureID, int destX, int destY,
                      &srcRectangle, &destRectangle,
                      rotationAngle, 0, flip);
 
+}
+
+void TextureManager::destroyTexture(std::string textureID)
+{
+    SDL_DestroyTexture(textureUMap[textureID]);
+    textureUMap.erase(textureID);
 }
