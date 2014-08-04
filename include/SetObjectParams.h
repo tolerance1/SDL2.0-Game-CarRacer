@@ -12,6 +12,7 @@ class SetObjectParams
         SetObjectParams(std::string textureID, int destX, int destY,
                         int width, int height,
                         int currentRow, int currentFrame,
+                        int numFrames = 1,
                         double rotationAngle = 0,
                         SDL_RendererFlip flip = SDL_FLIP_NONE);
         ~SetObjectParams();
@@ -23,6 +24,7 @@ class SetObjectParams
         int getHeight() const {return height; }
         int getCurrentFrame() const {return currentFrame; }
         int getCurrentRow() const {return currentRow; }
+        int getNumFrames() const {return numFrames; }
         double getRotationAngle() const {return rotationAngle; }
         SDL_RendererFlip getFlip() const {return flip; }
 
@@ -37,6 +39,8 @@ class SetObjectParams
 
         int currentFrame;
         int currentRow;
+
+        int numFrames;
 
         double rotationAngle;//rotate dest. rect.
 
