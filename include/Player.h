@@ -3,10 +3,14 @@
 
 #include "GameObject.h"
 
+#include "PlayState.h"
+
 class Player : public GameObject
 {
     public:
-        Player(const SetObjectParams* pInput);
+        typedef void (PlayState::*PlayPtr)();
+
+        Player(const SetObjectParams* pInput, PlayPtr pFunc);
         ~Player();
 
         void drawObject();
@@ -16,6 +20,8 @@ class Player : public GameObject
     private:
         void queryMouseStates();
         void queryKeyStates();
+
+        PlayPtr pPlayCallBack;
 };
 
 #endif // PLAYER_H
