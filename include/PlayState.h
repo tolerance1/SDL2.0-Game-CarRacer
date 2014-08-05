@@ -3,6 +3,11 @@
 
 #include "GameStateABC.h"
 
+#include "GameObjectABC.h"
+#include "GameObject.h"
+
+#include <vector>
+
 class PlayState : public GameStateABC
 {
     public:
@@ -15,10 +20,19 @@ class PlayState : public GameStateABC
         bool onEnter();
         bool onExit();
 
-        std::string getStateID() const {return playID; }
+        const std::string& getStateID() const {return playID; }
 
     private:
         static const std::string playID;
+
+        //container for game objects
+        std::vector<GameObjectABC*> gameObjects;
+
+        //call back functions
+        void switchToPause();
+        void switchToGameOver();
+
+        bool checkCollision(GameObject* p1, GameObject* p2) const;
 };
 
 #endif // PLAYSTATE_H
