@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<STATES>
+
+<!-- Menu State -->
+<MENU>
+    <TEXTURES>
+        <texture filename="images/menu_background.jpg" textureID="menu_background"/>
+        <texture filename="images/menu_button_play.png" textureID="menu_button_play"/>
+        <texture filename="images/menu_button_exit.png" textureID="menu_button_exit"/>
+    </TEXTURES>
+
+    <OBJECTS>
+        <object type="StaticGraphic" textureID="menu_background" destX="0" destY="0" width="640"
+                height="480" currentRow="0" currentFrame="0" numFrames="1" callbackID="1"/>
+        <object type="Button" textureID="menu_button_play" destX="449" destY="31" width="160"
+                height="45" currentRow="0" currentFrame="0" numFrames="3" callbackID="1"/>
+        <object type="Button" textureID="menu_button_exit" destX="449" destY="104" width="160"
+                height="45" currentRow="0" currentFrame="0" numFrames="3" callbackID="2"/>
+    </OBJECTS>
+</MENU>
+
+<!-- Play State -->
+<PLAY>
+    <TEXTURES>
+        <texture filename="images/player_car_yellow.png" textureID="player_car_yellow"/>
+        <texture filename="images/traffic_car_blue.png" textureID="traffic_car_blue"/>
+        <texture filename="images/traffic_car_orange.png" textureID="traffic_car_orange"/>
+        <texture filename="images/play_button_pause.png" textureID="play_button_pause"/>
+    </TEXTURES>
+
+    <OBJECTS>
+        <object type="Player" textureID="player_car_yellow" destX="0" destY="200" width="80"
+                height="45" currentRow="0" currentFrame="0" numFrames="2" callbackID="2"/>
+        <object type="Enemy" textureID="traffic_car_blue" destX="0" destY="100" width="80"
+                height="45" currentRow="0" currentFrame="0" numFrames="2" callbackID="0"/>
+        <object type="Enemy" textureID="traffic_car_orange" destX="0" destY="300" width="80"
+                height="45" currentRow="0" currentFrame="0" numFrames="2" callbackID="0"/>
+        <object type="Button" textureID="play_button_pause" destX="0" destY="0" width="45"
+                height="45" currentRow="0" currentFrame="0" numFrames="3" callbackID="1"/>
+    </OBJECTS>
+</PLAY>
+
+<!-- Pause State -->
+<PAUSE>
+    <TEXTURES>
+        <texture filename="images/pause_button_resume.png" textureID="pause_button_resume"/>
+        <texture filename="images/pause_button_menu.png" textureID="pause_button_menu"/>
+    </TEXTURES>
+
+    <OBJECTS>
+        <object type="Button" textureID="pause_button_resume" destX="240" destY="158" width="160"
+                height="45" currentRow="0" currentFrame="0" numFrames="3" callbackID="1"/>
+        <object type="Button" textureID="pause_button_menu" destX="240" destY="231" width="160"
+                height="45" currentRow="0" currentFrame="0" numFrames="3" callbackID="2"/>
+    </OBJECTS>
+</PAUSE>
+
+<!-- Game Over State -->
+<GAMEOVER>
+    <TEXTURES>
+        <texture filename="images/gameover_graphic.png" textureID="gameover_graphic"/>
+        <texture filename="images/gameover_button_restart.png" textureID="gameover_button_restart"/>
+        <texture filename="images/gameover_button_menu.png" textureID="gameover_button_menu"/>
+    </TEXTURES>
+
+    <OBJECTS>
+        <object type="StaticGraphic" textureID="gameover_graphic" destX="200" destY="88" width="250"
+                height="35" currentRow="0" currentFrame="0" numFrames="1" callbackID="0"/>
+        <object type="Button" textureID="gameover_button_restart" destX="240" destY="158" width="160"
+                height="45" currentRow="0" currentFrame="0" numFrames="3" callbackID="1"/>
+        <object type="Button" textureID="gameover_button_menu" destX="240" destY="231" width="160"
+                height="45" currentRow="0" currentFrame="0" numFrames="3" callbackID="2"/>
+    </OBJECTS>
+</GAMEOVER>
+</STATES>
