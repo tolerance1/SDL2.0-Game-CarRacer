@@ -1,5 +1,10 @@
 #include "GameStateMachine.h"
 
+#include "MenuState.h"
+#include "PlayState.h"
+#include "PauseState.h"
+#include "GameOverState.h"
+
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -58,10 +63,10 @@ void GameStateMachine::changeState(GameStateABC* pState)
 
 void GameStateMachine::updateCurrentState()
 {
-    if(bPendingChanges)
+    if(callbackID)
     {
         applyPendingChanges();
-        bPendingChanges = false;
+        callbackID = 0;
     }
 
     if(! gameStates.empty())
@@ -84,22 +89,30 @@ void GameStateMachine::applyPendingChanges()
 
     if(StateID == "MENU")
     {
-        ( static_cast<MenuState*>(getGameStates().top()) ->* pMenuCallBack )();
+        MenuState* pState = static_cast<MenuState*>(getGameStates().top());
+
+        ( pState ->* (pState->getCallbackFuncs()[callbackID]) )();
         return;
     }
     if(StateID == "PLAY")
     {
-        ( static_cast<PlayState*>(getGameStates().top()) ->* pPlayCallBack )();
+        PlayState* pState = static_cast<PlayState*>(getGameStates().top());
+
+        ( pState ->* (pState->getCallbackFuncs()[callbackID]) )();
         return;
     }
     if(StateID == "PAUSE")
     {
-        ( static_cast<PauseState*>(getGameStates().top()) ->* pPauseCallBack )();
+        PauseState* pState = static_cast<PauseState*>(getGameStates().top());
+
+        ( pState ->* (pState->getCallbackFuncs()[callbackID]) )();
         return;
     }
     if(StateID == "GAMEOVER")
     {
-        ( static_cast<GameOverState*>(getGameStates().top()) ->* pGOverCallBack )();
+        GameOverState* pState = static_cast<GameOverState*>(getGameStates().top());
+
+        ( pState ->* (pState->getCallbackFuncs()[callbackID]) )();
         return;
     }
 }
