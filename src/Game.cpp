@@ -3,6 +3,11 @@
 #include "TextureManager.h"
 #include "InputHandler.h"
 #include "MenuState.h"
+#include "GameObjectFactory.h"
+#include "ButtonCreator.h"
+#include "EnemyCreator.h"
+#include "PlayerCreator.h"
+#include "StaticGraphicCreator.h"
 
 #include <iostream>
 using std::cout;
@@ -71,6 +76,12 @@ bool Game::init()
     //create InputHandler object
     InputHandler::getpInputHandler();
 
+    //create game object factory and register game object types
+    GameObjectFactory::getpGameObjectFactory()->registerType("Button", new ButtonCreator());
+    GameObjectFactory::getpGameObjectFactory()->registerType("Enemy", new EnemyCreator());
+    GameObjectFactory::getpGameObjectFactory()->registerType("Player", new PlayerCreator());
+    GameObjectFactory::getpGameObjectFactory()->registerType("StaticGraphic", new StaticGraphicCreator());
+
     //create finite state machine
     pGameStateMachine = new GameStateMachine();
     pGameStateMachine->pushState(new MenuState());
@@ -117,6 +128,7 @@ void Game::clean()
 {
     //ALWAYS REMEMBER TO CLEAN AND DELETE POINTERS BEFORE EXIT!!!
 
+    delete GameObjectFactory::getpGameObjectFactory();//release the GameObjectFactory object memory
     delete InputHandler::getpInputHandler();//release the InputHandler object memory
     delete TextureManager::getpTextureManager();//release the TextureManager object memory
     delete pGame;//release the Game object memory
