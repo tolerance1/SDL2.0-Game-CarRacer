@@ -9,12 +9,14 @@
 class GameObject : public GameObjectABC
 {
     public:
-        GameObject(const SetObjectParams* pInput);
+        GameObject();
         ~GameObject();
 
         void drawObject();
         void updateObjectParams();
         void clean();
+
+        void initObject(const SetObjectParams* pInput);
 
         const Vector2D& getPosition() const {return Position; }
         int getWidth() const {return width; }

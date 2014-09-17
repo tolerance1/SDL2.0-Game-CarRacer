@@ -4,8 +4,7 @@
 using std::cout;
 using std::endl;
 
-Enemy::Enemy(const SetObjectParams* pInput)
-: GameObject(pInput)
+Enemy::Enemy()
 {
     cout << " 6 C Enemy" << endl;
 }
@@ -27,6 +26,11 @@ void Enemy::updateObjectParams()
     currentFrame = int(((SDL_GetTicks() / 100) % numFrames));
 
     GameObject::updateObjectParams();
+}
+
+void Enemy::initObject(const SetObjectParams* pInput)
+{
+    GameObject::initObject(pInput);
 }
 
 void Enemy::clean()

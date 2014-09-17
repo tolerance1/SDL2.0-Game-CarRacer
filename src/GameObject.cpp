@@ -7,10 +7,19 @@
 using std::cout;
 using std::endl;
 
-GameObject::GameObject(const SetObjectParams* pInput)
-: Position(pInput->getX(), pInput->getY()), Velocity(0, 0), Acceleration(0, 0)
+GameObject::GameObject()
 {
     cout << " 4 C GameObject" << endl;
+}
+
+GameObject::~GameObject()
+{
+    cout << " 4 D GameObject" << endl;
+}
+
+void GameObject::initObject(const SetObjectParams* pInput)
+{
+    Position = Vector2D(pInput->getX(), pInput->getY());
 
     textureID = pInput->getTextureID();
 
@@ -28,11 +37,6 @@ GameObject::GameObject(const SetObjectParams* pInput)
 
     //release parameters object
     delete pInput;
-}
-
-GameObject::~GameObject()
-{
-    cout << " 4 D GameObject" << endl;
 }
 
 void GameObject::drawObject()

@@ -6,13 +6,14 @@
 class Enemy : public GameObject
 {
     public:
-        Enemy(const SetObjectParams* pInput);
+        Enemy();
         ~Enemy();
 
         void drawObject();
         void updateObjectParams();
         void clean();
 
+        void initObject(const SetObjectParams* pInput);
 };
 
 #endif // ENEMY_H
