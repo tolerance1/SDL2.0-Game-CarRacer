@@ -3,24 +3,22 @@
 
 #include "GameObject.h"
 
-#include "MenuState.h"
-
 class StaticGraphic : public GameObject
 {
     public:
-        typedef void (MenuState::*MenuPtr)();
-
-        StaticGraphic(const SetObjectParams* pInput);
-        StaticGraphic(const SetObjectParams* pInput, MenuPtr pFunc);
+        StaticGraphic();
         ~StaticGraphic();
 
         void drawObject();
         void updateObjectParams();
         void clean();
 
+        void initObject(const SetObjectParams* pInput);
+
     private:
-        MenuPtr pMenuCallBack;
         bool bReleased;
+
+        int callbackID;
 };
 
 #endif // STATICGRAPHIC_H

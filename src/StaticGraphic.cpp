@@ -7,14 +7,7 @@
 using std::cout;
 using std::endl;
 
-StaticGraphic::StaticGraphic(const SetObjectParams* pInput)
-: GameObject(pInput)
-{
-    cout << " 15 C StaticGraphic" << endl;
-}
-
-StaticGraphic::StaticGraphic(const SetObjectParams* pInput, MenuPtr pFunc)
-: GameObject(pInput), pMenuCallBack(pFunc)
+StaticGraphic::StaticGraphic()
 {
     cout << " 15 C StaticGraphic" << endl;
 }
@@ -44,10 +37,16 @@ void StaticGraphic::updateObjectParams()
         {
             bReleased = false;
 
-            Game::getpGame()->getpGameStateMachine()->setbPendingChanges() = true;
-            Game::getpGame()->getpGameStateMachine()->setpMenuCallBack() = pMenuCallBack;
+            Game::getpGame()->getpGameStateMachine()->setCallbackID(callbackID);
         }
     }
+}
+
+void StaticGraphic::initObject(const SetObjectParams* pInput)
+{
+    callbackID = pInput->getCallbackID();
+
+    GameObject::initObject(pInput);
 }
 
 void StaticGraphic::clean()

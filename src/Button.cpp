@@ -7,26 +7,7 @@
 using std::cout;
 using std::endl;
 
-Button::Button(const SetObjectParams* pInput, MenuPtr pFunc)
-: GameObject(pInput), pMenuCallBack(pFunc)
-{
-    cout << " 14 C Button" << endl;
-}
-
-Button::Button(const SetObjectParams* pInput, PlayPtr pFunc)
-: GameObject(pInput), pPlayCallBack(pFunc)
-{
-    cout << " 14 C Button" << endl;
-}
-
-Button::Button(const SetObjectParams* pInput, PausePtr pFunc)
-: GameObject(pInput), pPauseCallBack(pFunc)
-{
-    cout << " 14 C Button" << endl;
-}
-
-Button::Button(const SetObjectParams* pInput, GOverPtr pFunc)
-: GameObject(pInput), pGOverCallBack(pFunc)
+Button::Button()
 {
     cout << " 14 C Button" << endl;
 }
@@ -60,8 +41,7 @@ void Button::updateObjectParams()
             currentFrame = CLICKED;
             bReleased = false;
 
-            Game::getpGame()->getpGameStateMachine()->setbPendingChanges() = true;
-            transferFuncPtr();
+            Game::getpGame()->getpGameStateMachine()->setCallbackID(callbackID);
         }
     }
     else
@@ -70,27 +50,11 @@ void Button::updateObjectParams()
     }
 }
 
-void Button::transferFuncPtr()
+void Button::initObject(const SetObjectParams* pInput)
 {
-    const std::string& StateID =
-    Game::getpGame()->getpGameStateMachine()->getGameStates().top()->getStateID();
+    callbackID = pInput->getCallbackID();
 
-    if(StateID == "MENU")
-    {
-        Game::getpGame()->getpGameStateMachine()->setpMenuCallBack() = pMenuCallBack;
-    }
-    if(StateID == "PLAY")
-    {
-        Game::getpGame()->getpGameStateMachine()->setpPlayCallBack() = pPlayCallBack;
-    }
-    if(StateID == "PAUSE")
-    {
-        Game::getpGame()->getpGameStateMachine()->setpPauseCallBack() = pPauseCallBack;
-    }
-    if(StateID == "GAMEOVER")
-    {
-        Game::getpGame()->getpGameStateMachine()->setpGOverCallBack() = pGOverCallBack;
-    }
+    GameObject::initObject(pInput);
 }
 
 void Button::clean()

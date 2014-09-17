@@ -7,8 +7,7 @@
 using std::cout;
 using std::endl;
 
-Player::Player(const SetObjectParams* pInput, PlayPtr pFunc)
-: GameObject(pInput), pPlayCallBack(pFunc)
+Player::Player()
 {
     cout << " 5 C Player" << endl;
 }
@@ -33,8 +32,7 @@ void Player::queryMouseStates()
 
     if(InputHandler::getpInputHandler()->getMouseButtonState(MIDDLE))
     {
-        Game::getpGame()->getpGameStateMachine()->setbPendingChanges() = true;
-        Game::getpGame()->getpGameStateMachine()->setpPlayCallBack() = pPlayCallBack;
+        Game::getpGame()->getpGameStateMachine()->setCallbackID(callbackID);
     }
 
 }
@@ -75,6 +73,13 @@ void Player::updateObjectParams()
     currentFrame = int(((SDL_GetTicks() / 100) % numFrames));
 
     GameObject::updateObjectParams();
+}
+
+void Player::initObject(const SetObjectParams* pInput)
+{
+    callbackID = pInput->getCallbackID();
+
+    GameObject::initObject(pInput);
 }
 
 void Player::clean()
