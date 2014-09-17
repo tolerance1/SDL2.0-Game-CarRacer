@@ -1,8 +1,8 @@
 #include "PauseState.h"
 
-#include "TextureManager.h"
 #include "Game.h"
-#include "Button.h"
+#include "StateParser.h"
+#include "MenuState.h"
 
 #include <iostream>
 using std::cout;
@@ -19,12 +19,6 @@ PauseState::PauseState()
 PauseState::~PauseState()
 {
     cout << " 16 D PauseState" << endl;
-
-    //release game objects
-    for(size_t Index = 0; Index != gameObjects.size(); ++Index)
-    {
-        delete gameObjects[Index];
-    }
 }
 
 void PauseState::update()
@@ -47,24 +41,14 @@ void PauseState::render()
 
 bool PauseState::onEnter()
 {
-    //create textures
-    if(! TextureManager::getpTextureManager()->createTexture("images/pause_button_resume.png",
-                                                             "pause_button_resume",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;//don't start the loop
-    }
-    if(! TextureManager::getpTextureManager()->createTexture("images/pause_button_menu.png",
-                                                             "pause_button_menu",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;
-    }
+    //parse the state (creates textures and objects)
+    StateParser parser;
+    parser.parseState("xml/game_states.xml", pauseID, &textureIDs, &gameObjects);
 
-
-    //create objects and push them into container
-    gameObjects.push_back(new Button(new SetObjectParams("pause_button_resume", 240, 158, 160, 45, 0, 0), &PauseState::resumePlay));
-    gameObjects.push_back(new Button(new SetObjectParams("pause_button_menu", 240, 231, 160, 45, 0, 0), &PauseState::switchToMenu));
+    //populate array with function pointers
+    callbackFuncs.push_back(nullptr);//skip index 0
+    callbackFuncs.push_back(&PauseState::resumePlay);
+    callbackFuncs.push_back(&PauseState::switchToMenu);
 
     cout << "entering PauseState" << endl;
     return true;
@@ -72,11 +56,9 @@ bool PauseState::onEnter()
 
 bool PauseState::onExit()
 {
-    TextureManager::getpTextureManager()->destroyTexture("pause_button_resume");
-    TextureManager::getpTextureManager()->destroyTexture("pause_button_menu");
-
     cout << "exiting PauseState" << endl;
-    return true;
+
+    return GameStateABC::onExit();
 }
 
 void PauseState::resumePlay()

@@ -1,9 +1,7 @@
 #include "MenuState.h"
 
-#include "TextureManager.h"
 #include "Game.h"
-#include "Button.h"
-#include "StaticGraphic.h"
+#include "StateParser.h"
 #include "PlayState.h"
 
 #include <iostream>
@@ -21,12 +19,6 @@ MenuState::MenuState()
 MenuState::~MenuState()
 {
     cout << " 11 D MenuState" << endl;
-
-    //release game objects
-    for(size_t Index = 0; Index != gameObjects.size(); ++Index)
-    {
-        delete gameObjects[Index];
-    }
 }
 
 void MenuState::update()
@@ -49,30 +41,14 @@ void MenuState::render()
 
 bool MenuState::onEnter()
 {
-    //create textures
-    if(! TextureManager::getpTextureManager()->createTexture("images/menu_background.jpg",
-                                                             "menu_background",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;//don't start the loop
-    }
-    if(! TextureManager::getpTextureManager()->createTexture("images/menu_button_play.png",
-                                                             "menu_button_play",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;
-    }
-    if(! TextureManager::getpTextureManager()->createTexture("images/menu_button_exit.png",
-                                                             "menu_button_exit",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;
-    }
+    //parse the state (creates textures and objects)
+    StateParser parser;
+    parser.parseState("xml/game_states.xml", menuID, &textureIDs, &gameObjects);
 
-    //create objects and push them into container
-    gameObjects.push_back(new StaticGraphic(new SetObjectParams("menu_background", 0, 0, 640, 480, 0, 0), &MenuState::switchToPlay));
-    gameObjects.push_back(new Button(new SetObjectParams("menu_button_play", 449, 31, 160, 45, 0, 0), &MenuState::switchToPlay));
-    gameObjects.push_back(new Button(new SetObjectParams("menu_button_exit", 449, 104, 160, 45, 0, 0), &MenuState::exitFromGame));
+    //populate array with function pointers
+    callbackFuncs.push_back(nullptr);//skip index 0
+    callbackFuncs.push_back(&MenuState::switchToPlay);
+    callbackFuncs.push_back(&MenuState::exitFromGame);
 
     cout << "entering MenuState" << endl;
     return true;
@@ -80,12 +56,9 @@ bool MenuState::onEnter()
 
 bool MenuState::onExit()
 {
-    TextureManager::getpTextureManager()->destroyTexture("menu_background");
-    TextureManager::getpTextureManager()->destroyTexture("menu_button_play");
-    TextureManager::getpTextureManager()->destroyTexture("menu_button_exit");
-
     cout << "exiting MenuState" << endl;
-    return true;
+
+    return GameStateABC::onExit();
 }
 
 void MenuState::switchToPlay()

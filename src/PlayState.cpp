@@ -1,10 +1,9 @@
 #include "PlayState.h"
 
-#include "TextureManager.h"
 #include "Game.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "Button.h"
+#include "StateParser.h"
+#include "PauseState.h"
+#include "GameOverState.h"
 
 #include <iostream>
 using std::cout;
@@ -21,12 +20,6 @@ PlayState::PlayState()
 PlayState::~PlayState()
 {
     cout << " 12 D PlayState" << endl;
-
-    //release game objects
-    for(size_t Index = 0; Index != gameObjects.size(); ++Index)
-    {
-        delete gameObjects[Index];
-    }
 }
 
 void PlayState::update()
@@ -42,8 +35,7 @@ void PlayState::update()
         if(checkCollision(static_cast<GameObject*>(gameObjects[0]),
                           static_cast<GameObject*>(gameObjects[EnemyIndex])))
         {
-            Game::getpGame()->getpGameStateMachine()->setbPendingChanges() = true;
-            Game::getpGame()->getpGameStateMachine()->setpPlayCallBack() = &PlayState::switchToGameOver;
+            Game::getpGame()->getpGameStateMachine()->setCallbackID(SWITCHTOGAMEOVER);
         }
     }
 }
@@ -59,37 +51,14 @@ void PlayState::render()
 
 bool PlayState::onEnter()
 {
-    //create textures
-    if(! TextureManager::getpTextureManager()->createTexture("images/player_car_yellow.png",
-                                                             "player_car_yellow",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;//don't start the loop
-    }
-    if(! TextureManager::getpTextureManager()->createTexture("images/traffic_car_blue.png",
-                                                             "traffic_car_blue",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;
-    }
-    if(! TextureManager::getpTextureManager()->createTexture("images/traffic_car_orange.png",
-                                                             "traffic_car_orange",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;
-    }
-    if(! TextureManager::getpTextureManager()->createTexture("images/play_button_pause.png",
-                                                             "play_button_pause",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;
-    }
+    //parse the state (creates textures and objects)
+    StateParser parser;
+    parser.parseState("xml/game_states.xml", playID, &textureIDs, &gameObjects);
 
-    //create objects and push them into container
-    gameObjects.push_back(new Player(new SetObjectParams("player_car_yellow", 0, 200, 80, 45, 0, 0, 2), &PlayState::switchToGameOver));
-    gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_blue", 0, 100, 80, 45, 0, 0, 2)));
-    gameObjects.push_back(new Enemy(new SetObjectParams("traffic_car_orange", 0, 300, 80, 45, 0, 0, 2)));
-    gameObjects.push_back(new Button(new SetObjectParams("play_button_pause", 0, 0, 45, 45, 0, 0), &PlayState::switchToPause));
+    //populate array with function pointers
+    callbackFuncs.push_back(nullptr);//skip index 0
+    callbackFuncs.push_back(&PlayState::switchToPause);
+    callbackFuncs.push_back(&PlayState::switchToGameOver);
 
     cout << "entering PlayState" << endl;
     return true;
@@ -97,13 +66,9 @@ bool PlayState::onEnter()
 
 bool PlayState::onExit()
 {
-    TextureManager::getpTextureManager()->destroyTexture("player_car_yellow");
-    TextureManager::getpTextureManager()->destroyTexture("traffic_car_blue");
-    TextureManager::getpTextureManager()->destroyTexture("traffic_car_orange");
-    TextureManager::getpTextureManager()->destroyTexture("play_button_pause");
-
     cout << "exiting PlayState" << endl;
-    return true;
+
+    return GameStateABC::onExit();
 }
 
 void PlayState::switchToPause()

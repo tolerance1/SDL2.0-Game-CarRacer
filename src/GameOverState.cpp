@@ -1,9 +1,9 @@
 #include "GameOverState.h"
 
-#include "TextureManager.h"
 #include "Game.h"
-#include "Button.h"
-#include "StaticGraphic.h"
+#include "StateParser.h"
+#include "PlayState.h"
+#include "MenuState.h"
 
 #include <iostream>
 using std::cout;
@@ -20,12 +20,6 @@ GameOverState::GameOverState()
 GameOverState::~GameOverState()
 {
     cout << " 16 D GameOverState" << endl;
-
-    //release game objects
-    for(size_t Index = 0; Index != gameObjects.size(); ++Index)
-    {
-        delete gameObjects[Index];
-    }
 }
 
 void GameOverState::update()
@@ -48,31 +42,14 @@ void GameOverState::render()
 
 bool GameOverState::onEnter()
 {
-    //create textures
-    if(! TextureManager::getpTextureManager()->createTexture("images/gameover_graphic.png",
-                                                             "gameover_graphic",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;//don't start the loop
-    }
-    if(! TextureManager::getpTextureManager()->createTexture("images/gameover_button_restart.png",
-                                                             "gameover_button_restart",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;
-    }
-    if(! TextureManager::getpTextureManager()->createTexture("images/gameover_button_menu.png",
-                                                             "gameover_button_menu",
-                                                             Game::getpGame()->getpRenderer()) )
-    {
-        return false;
-    }
+    //parse the state (creates textures and objects)
+    StateParser parser;
+    parser.parseState("xml/game_states.xml", gameOverID, &textureIDs, &gameObjects);
 
-
-    //create objects and push them into container
-    gameObjects.push_back(new StaticGraphic(new SetObjectParams("gameover_graphic", 200, 88, 250, 35, 0, 0)));
-    gameObjects.push_back(new Button(new SetObjectParams("gameover_button_restart", 240, 158, 160, 45, 0, 0), &GameOverState::restartPlay));
-    gameObjects.push_back(new Button(new SetObjectParams("gameover_button_menu", 240, 231, 160, 45, 0, 0), &GameOverState::switchToMenu));
+    //populate array with function pointers
+    callbackFuncs.push_back(nullptr);//skip index 0
+    callbackFuncs.push_back(&GameOverState::restartPlay);
+    callbackFuncs.push_back(&GameOverState::switchToMenu);
 
     cout << "entering GameOverState" << endl;
     return true;
@@ -80,12 +57,9 @@ bool GameOverState::onEnter()
 
 bool GameOverState::onExit()
 {
-    TextureManager::getpTextureManager()->destroyTexture("gameover_graphic");
-    TextureManager::getpTextureManager()->destroyTexture("gameover_button_restart");
-    TextureManager::getpTextureManager()->destroyTexture("gameover_button_menu");
-
     cout << "exiting GameOverState" << endl;
-    return true;
+
+    return GameStateABC::onExit();
 }
 
 void GameOverState::restartPlay()
