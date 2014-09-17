@@ -26,6 +26,13 @@ GameObjectFactory::GameObjectFactory()
 GameObjectFactory::~GameObjectFactory()
 {
     cout << " 17 D GameObjectFactory" << endl;
+
+    //release the object creators
+    while(! creatorUMAP.empty())
+    {
+        delete creatorUMAP.begin()->second;//deletes the object creator pointed to
+        creatorUMAP.erase(creatorUMAP.begin());
+    }
 }
 
 bool GameObjectFactory::registerType(std::string typeID, ObjectCreatorABC* pCreator)
