@@ -4,7 +4,7 @@
 class Vector2D
 {
     public:
-        Vector2D(float X, float Y);
+        Vector2D(float X = 0, float Y = 0);
         ~Vector2D();
 
         float getX() const {return x; }
