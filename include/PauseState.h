@@ -3,13 +3,11 @@
 
 #include "GameStateABC.h"
 
-#include "GameObjectABC.h"
-
-#include <vector>
-
 class PauseState : public GameStateABC
 {
     public:
+        typedef void (PauseState::*PausePtr)();
+
         PauseState();
         ~PauseState();
 
@@ -20,12 +18,13 @@ class PauseState : public GameStateABC
         bool onExit();
 
         const std::string& getStateID() const {return pauseID; }
+        const std::vector<PausePtr>& getCallbackFuncs() const {return callbackFuncs; }
 
     private:
         static const std::string pauseID;
 
-        //container for game objects
-        std::vector<GameObjectABC*> gameObjects;
+        //function pointers array
+        std::vector<PausePtr> callbackFuncs;
 
         //call back functions
         void resumePlay();

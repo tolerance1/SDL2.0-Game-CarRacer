@@ -3,13 +3,11 @@
 
 #include "GameStateABC.h"
 
-#include "GameObjectABC.h"
-
-#include <vector>
-
 class MenuState : public GameStateABC
 {
     public:
+        typedef void (MenuState::*MenuPtr)();
+
         MenuState();
         ~MenuState();
 
@@ -20,12 +18,13 @@ class MenuState : public GameStateABC
         bool onExit();
 
         const std::string& getStateID() const {return menuID; }
+        const std::vector<MenuPtr>& getCallbackFuncs() const {return callbackFuncs; }
 
     private:
         static const std::string menuID;
 
-        //container for game objects
-        std::vector<GameObjectABC*> gameObjects;
+        //function pointers array
+        std::vector<MenuPtr> callbackFuncs;
 
         //call back functions
         void switchToPlay();
