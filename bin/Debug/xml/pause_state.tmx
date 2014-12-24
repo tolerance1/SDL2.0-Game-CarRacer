@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="32" tileheight="32">
+ <objectgroup name="Object Layer 1" width="20" height="15">
+  <properties>
+   <property name="pause_button_resume" value="images/pause_button_resume.png"/>
+   <property name="pause_button_menu" value="images/pause_button_menu.png"/>
+  </properties>
+  <object name="pause_button_resume" type="Button" x="240" y="158" width="160" height="45">
+   <properties>
+    <property name="callbackID" value="1"/>
+    <property name="numFrames" value="3"/>
+   </properties>
+  </object>
+  <object name="pause_button_menu" type="Button" x="240" y="231" width="160" height="45">
+   <properties>
+    <property name="callbackID" value="2"/>
+    <property name="numFrames" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

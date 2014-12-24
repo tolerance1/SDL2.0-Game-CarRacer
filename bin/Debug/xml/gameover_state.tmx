@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="32" tileheight="32">
+ <objectgroup name="Object Layer 1" width="20" height="15">
+  <properties>
+   <property name="gameover_graphic" value="images/gameover_graphic.png"/>
+   <property name="gameover_button_restart" value="images/gameover_button_restart.png"/>
+   <property name="gameover_button_menu" value="images/gameover_button_menu.png"/>
+  </properties>
+  <object name="gameover_graphic" type="StaticGraphic" x="200" y="88" width="250" height="35">
+   <properties>
+    <property name="callbackID" value="0"/>
+    <property name="numFrames" value="1"/>
+   </properties>
+  </object>
+  <object name="gameover_button_restart" type="Button" x="240" y="158" width="160" height="45">
+   <properties>
+    <property name="callbackID" value="1"/>
+    <property name="numFrames" value="3"/>
+   </properties>
+  </object>
+  <object name="gameover_button_menu" type="Button" x="240" y="231" width="160" height="45">
+   <properties>
+    <property name="callbackID" value="2"/>
+    <property name="numFrames" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

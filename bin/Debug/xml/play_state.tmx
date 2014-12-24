@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset_water" tilewidth="32" tileheight="32">
+  <image source="images/tileset_water.png" width="96" height="32"/>
+ </tileset>
+ <tileset firstgid="4" name="tileset_road" tilewidth="32" tileheight="32">
+  <image source="images/tileset_road.png" width="32" height="352"/>
+ </tileset>
+ <layer name="Tile Layer Water" width="40" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYBzFwxaPglEwCkbBKBicYKDrh1FMWwwAcHwA8Q==
+  </data>
+ </layer>
+ <layer name="Tile Layer Road" width="40" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztw7cNACAMADAGevv/XI5g8RBLTin8yPiCr/iG7/iBn/iF3/iDv/jw5wHwYw95
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="40" height="15">
+  <properties>
+   <property name="play_button_pause" value="images/play_button_pause.png"/>
+   <property name="player_car_yellow" value="images/player_car_yellow.png"/>
+   <property name="traffic_car_blue" value="images/traffic_car_blue.png"/>
+   <property name="traffic_car_orange" value="images/traffic_car_orange.png"/>
+  </properties>
+  <object name="player_car_yellow" type="Player" x="0" y="217" width="80" height="45">
+   <properties>
+    <property name="callbackID" value="2"/>
+    <property name="numFrames" value="2"/>
+   </properties>
+  </object>
+  <object name="traffic_car_blue" type="Enemy" x="0" y="142" width="80" height="45">
+   <properties>
+    <property name="callbackID" value="0"/>
+    <property name="numFrames" value="2"/>
+   </properties>
+  </object>
+  <object name="traffic_car_orange" type="Enemy" x="0" y="292" width="80" height="45">
+   <properties>
+    <property name="callbackID" value="0"/>
+    <property name="numFrames" value="2"/>
+   </properties>
+  </object>
+  <object name="play_button_pause" type="Button" x="0" y="0" width="45" height="45">
+   <properties>
+    <property name="callbackID" value="1"/>
+    <property name="numFrames" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
