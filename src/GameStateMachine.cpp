@@ -12,17 +12,56 @@ using std::endl;
 GameStateMachine::GameStateMachine()
 {
     cout << " 13 C GameStateMachine" << endl;
+
+    registerState<MenuState>(States::Menu);
+    registerState<PlayState>(States::Play);
+    registerState<PauseState>(States::Pause);
+    registerState<GameOverState>(States::Gameover);
+
+    pushState(new MenuState());
 }
 
 GameStateMachine::~GameStateMachine()
 {
     cout << " 13 D GameStateMachine" << endl;
 
-    //release game states objects
+    //release game state objects
     while(! gameStates.empty())
     {
         delete gameStates.top();
         gameStates.pop();
+    }
+}
+
+GameStateMachine::PendingChange::PendingChange(Action action, States::ID stateID)
+: action(action), stateID(stateID)
+{
+    cout << " 31 C PendingChange" << endl;
+}
+
+GameStateMachine::PendingChange::~PendingChange()
+{
+    cout << " 31 D PendingChange" << endl;
+}
+
+void GameStateMachine::updateCurrentState()
+{
+    if(! pendingList.empty())
+    {
+        applyPendingChanges();
+    }
+
+    if(! gameStates.empty())
+    {
+        gameStates.top()->update();
+    }
+}
+
+void GameStateMachine::renderCurrentState()
+{
+    if(! gameStates.empty())
+    {
+        gameStates.top()->render();
     }
 }
 
@@ -61,58 +100,54 @@ void GameStateMachine::changeState(GameStateABC* pState)
     gameStates.top()->onEnter();
 }
 
-void GameStateMachine::updateCurrentState()
+void GameStateMachine::requestStackPush(States::ID stateID)
 {
-    if(callbackID)
-    {
-        applyPendingChanges();
-        callbackID = 0;
-    }
-
-    if(! gameStates.empty())
-    {
-        gameStates.top()->update();
-    }
+    pendingList.push_back(PendingChange(Push, stateID));
 }
 
-void GameStateMachine::renderCurrentState()
+void GameStateMachine::requestStackPop()
 {
-    if(! gameStates.empty())
+    pendingList.push_back(PendingChange(Pop));
+}
+
+void GameStateMachine::requestStackChange(States::ID stateID)
+{
+    pendingList.push_back(PendingChange(Change, stateID));
+}
+
+GameStateABC* GameStateMachine::createState(States::ID stateID)
+{
+    auto Iterator = stateFactory.find(stateID);
+
+    if(Iterator != stateFactory.cend())
     {
-        gameStates.top()->render();
+        return Iterator->second();
     }
+
+	return nullptr;//state does not exist
 }
 
 void GameStateMachine::applyPendingChanges()
 {
-    const std::string& StateID = getGameStates().top()->getStateID();
-
-    if(StateID == "MENU")
+    for(size_t Index = 0; Index != pendingList.size(); ++Index)
     {
-        MenuState* pState = static_cast<MenuState*>(getGameStates().top());
+        PendingChange& change = pendingList[Index];
 
-        ( pState ->* (pState->getCallbackFuncs()[callbackID]) )();
-        return;
-    }
-    if(StateID == "PLAY")
-    {
-        PlayState* pState = static_cast<PlayState*>(getGameStates().top());
+        switch(change.action)
+        {
+            case Push:
+				pushState(createState(change.stateID));
+				break;
 
-        ( pState ->* (pState->getCallbackFuncs()[callbackID]) )();
-        return;
-    }
-    if(StateID == "PAUSE")
-    {
-        PauseState* pState = static_cast<PauseState*>(getGameStates().top());
+			case Pop:
+				popState();
+				break;
 
-        ( pState ->* (pState->getCallbackFuncs()[callbackID]) )();
-        return;
+			case Change:
+				changeState(createState(change.stateID));
+				break;
+        }
     }
-    if(StateID == "GAMEOVER")
-    {
-        GameOverState* pState = static_cast<GameOverState*>(getGameStates().top());
 
-        ( pState ->* (pState->getCallbackFuncs()[callbackID]) )();
-        return;
-    }
+    pendingList.clear();
 }
