@@ -32,7 +32,7 @@ void Player::queryMouseStates()
 
     if(InputHandler::getpInputHandler()->getMouseButtonState(MIDDLE))
     {
-        Game::getpGame()->getpGameStateMachine()->setCallbackID(callbackID);
+        Game::getpGame()->getpGameStateMachine()->getGameStates().top()->callFunction(callbackID);
     }
 
 }

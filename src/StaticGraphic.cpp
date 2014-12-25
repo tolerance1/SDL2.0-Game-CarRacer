@@ -37,7 +37,7 @@ void StaticGraphic::updateObjectParams()
         {
             bReleased = false;
 
-            Game::getpGame()->getpGameStateMachine()->setCallbackID(callbackID);
+            Game::getpGame()->getpGameStateMachine()->getGameStates().top()->callFunction(callbackID);
         }
     }
 }

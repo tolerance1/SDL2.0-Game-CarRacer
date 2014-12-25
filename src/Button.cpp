@@ -41,7 +41,7 @@ void Button::updateObjectParams()
             currentFrame = CLICKED;
             bReleased = false;
 
-            Game::getpGame()->getpGameStateMachine()->setCallbackID(callbackID);
+            Game::getpGame()->getpGameStateMachine()->getGameStates().top()->callFunction(callbackID);
         }
     }
     else
