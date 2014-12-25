@@ -18,12 +18,16 @@ class Game
         GameStateMachine* getpGameStateMachine() const {return pGameStateMachine; }
         SDL_Renderer* getpRenderer() const {return pRenderer; }
         bool getbRunning() const {return bRunning; }
+        int getGameWidth() const {return gameWidth; }
+        int getGameHeight() const {return gameHeight; }
         static Game* getpGame();//create a single instance
 
         bool& setbRunning() {return bRunning; }
 
     private:
         bool bRunning;
+        int gameWidth;
+        int gameHeight;
         SDL_Window* pWindow;
         SDL_Renderer* pRenderer;
         GameStateMachine* pGameStateMachine;
