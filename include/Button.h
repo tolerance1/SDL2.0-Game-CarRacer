@@ -20,7 +20,7 @@ class Button : public GameObject
 
         bool bReleased;
 
-        int callbackID;
+        size_t callbackID;//index into function pointers array
 };
 
 #endif // BUTTON_H
