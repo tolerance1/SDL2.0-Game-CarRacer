@@ -2,9 +2,8 @@
 #define GAMESTATEABC_H
 
 #include <string>
-#include <vector>
 
-#include "GameObjectABC.h"
+#include "Level.h"
 
 class GameStateABC
 {
@@ -20,12 +19,13 @@ class GameStateABC
 
         virtual const std::string& getStateID() const = 0;
 
+        virtual void callFunction(size_t callbackID) = 0;
+
     protected:
+        Level* pLevel;//current game level
+
         //bookkeep the state's loaded textures
         std::vector<std::string> textureIDs;
-
-        //container for game objects
-        std::vector<GameObjectABC*> gameObjects;
 };
 
 #endif // GAMESTATEABC_H

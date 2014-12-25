@@ -1,6 +1,6 @@
 #include "GameStateABC.h"
 
-#include "TextureManager.h"
+#include"TextureManager.h"
 
 #include <iostream>
 using std::cout;
@@ -15,17 +15,14 @@ GameStateABC::~GameStateABC()
 {
     cout << " 10 D GameStateABC" << endl;
 
-    //release game objects
-    for(size_t Index = 0; Index != gameObjects.size(); ++Index)
-    {
-        delete gameObjects[Index];
-    }
+    //release the level object
+    delete pLevel;
 }
 
 bool GameStateABC::onExit()
 {
     //release the state's textures
-    for(size_t Index = 0; Index != gameObjects.size(); ++Index)
+    for(size_t Index = 0; Index != textureIDs.size(); ++Index)
     {
         TextureManager::getpTextureManager()->destroyTexture(textureIDs[Index]);
     }
