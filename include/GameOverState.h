@@ -6,8 +6,6 @@
 class GameOverState : public GameStateABC
 {
     public:
-        typedef void (GameOverState::*GOverPtr)();
-
         GameOverState();
         ~GameOverState();
 
@@ -18,9 +16,15 @@ class GameOverState : public GameStateABC
         bool onExit();
 
         const std::string& getStateID() const {return gameOverID; }
-        const std::vector<GOverPtr>& getCallbackFuncs() const {return callbackFuncs; }
+
+        void callFunction(size_t callbackID)
+        {
+            (this->*callbackFuncs[callbackID])();
+        }
 
     private:
+        typedef void (GameOverState::*GOverPtr)();
+
         static const std::string gameOverID;
 
         //function pointers array

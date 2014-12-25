@@ -3,13 +3,11 @@
 
 #include "GameStateABC.h"
 
-#include "GameObject.h"
+#include "CollisionManager.h"
 
 class PlayState : public GameStateABC
 {
     public:
-        typedef void (PlayState::*PlayPtr)();
-
         PlayState();
         ~PlayState();
 
@@ -20,9 +18,15 @@ class PlayState : public GameStateABC
         bool onExit();
 
         const std::string& getStateID() const {return playID; }
-        const std::vector<PlayPtr>& getCallbackFuncs() const {return callbackFuncs; }
+
+        void callFunction(size_t callbackID)
+        {
+            (this->*callbackFuncs[callbackID])();
+        }
 
     private:
+        typedef void (PlayState::*PlayPtr)();
+
         static const std::string playID;
 
         //function pointers array
@@ -32,9 +36,8 @@ class PlayState : public GameStateABC
         void switchToPause();
         void switchToGameOver();
 
-        bool checkCollision(GameObject* p1, GameObject* p2) const;
-
-        enum FunctionId {SWITCHTOPAUSE = 1, SWITCHTOGAMEOVER = 2};
+    private:
+        CollisionManager* pCollisionManager;
 };
 
 #endif // PLAYSTATE_H

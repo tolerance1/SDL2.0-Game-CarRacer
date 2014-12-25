@@ -6,8 +6,6 @@
 class MenuState : public GameStateABC
 {
     public:
-        typedef void (MenuState::*MenuPtr)();
-
         MenuState();
         ~MenuState();
 
@@ -18,9 +16,15 @@ class MenuState : public GameStateABC
         bool onExit();
 
         const std::string& getStateID() const {return menuID; }
-        const std::vector<MenuPtr>& getCallbackFuncs() const {return callbackFuncs; }
+
+        void callFunction(size_t callbackID)
+        {
+            (this->*callbackFuncs[callbackID])();
+        }
 
     private:
+        typedef void (MenuState::*MenuPtr)();
+
         static const std::string menuID;
 
         //function pointers array

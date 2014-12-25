@@ -6,8 +6,6 @@
 class PauseState : public GameStateABC
 {
     public:
-        typedef void (PauseState::*PausePtr)();
-
         PauseState();
         ~PauseState();
 
@@ -18,9 +16,15 @@ class PauseState : public GameStateABC
         bool onExit();
 
         const std::string& getStateID() const {return pauseID; }
-        const std::vector<PausePtr>& getCallbackFuncs() const {return callbackFuncs; }
+
+        void callFunction(size_t callbackID)
+        {
+            (this->*callbackFuncs[callbackID])();
+        }
 
     private:
+        typedef void (PauseState::*PausePtr)();
+
         static const std::string pauseID;
 
         //function pointers array

@@ -1,9 +1,7 @@
 #include "GameOverState.h"
 
 #include "Game.h"
-#include "StateParser.h"
-#include "PlayState.h"
-#include "MenuState.h"
+#include "LevelParser.h"
 
 #include <iostream>
 using std::cout;
@@ -24,27 +22,21 @@ GameOverState::~GameOverState()
 
 void GameOverState::update()
 {
-    //update game objects destination coordinates and current frame
-    for(size_t Index = 0; Index != gameObjects.size(); ++Index)
-    {
-        gameObjects[Index]->updateObjectParams();
-    }
+    //update state
+    pLevel->update();
 }
 
 void GameOverState::render()
 {
-    //draw game objects
-    for(size_t Index = 0; Index != gameObjects.size(); ++Index)
-    {
-        gameObjects[Index]->drawObject();
-    }
+    //draw state
+    pLevel->render();
 }
 
 bool GameOverState::onEnter()
 {
-    //parse the state (creates textures and objects)
-    StateParser parser;
-    parser.parseState("xml/game_states.xml", gameOverID, &textureIDs, &gameObjects);
+    //parse level (creates map, textures and objects)
+    LevelParser levelParser(&textureIDs);
+    pLevel = levelParser.parseLevel("xml/gameover_state.tmx");
 
     //populate array with function pointers
     callbackFuncs.push_back(nullptr);//skip index 0
@@ -65,11 +57,11 @@ bool GameOverState::onExit()
 void GameOverState::restartPlay()
 {
     cout << "Restart button clicked" << endl;
-    Game::getpGame()->getpGameStateMachine()->changeState(new PlayState());
+    Game::getpGame()->getpGameStateMachine()->requestStackChange(States::Play);
 }
 
 void GameOverState::switchToMenu()
 {
     cout << "Menu button clicked" << endl;
-    Game::getpGame()->getpGameStateMachine()->changeState(new MenuState());
+    Game::getpGame()->getpGameStateMachine()->requestStackChange(States::Menu);
 }
