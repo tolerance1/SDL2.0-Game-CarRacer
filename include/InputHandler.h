@@ -17,15 +17,20 @@ class InputHandler
         void clean();//clean initialised devices
 
         bool getKeyState(SDL_Scancode keyCode) const;
-        Vector2D* getpMousePosition() const;
         bool getMouseButtonState(int buttonNumber) const;
+
+        Vector2D* getpMousePosition() const;
+
         static InputHandler* getpInputHandler();//create a single instance
 
     private:
-        const Uint8* pKeyStates;//pointer to the SDL inbuilt key states array
-        Vector2D* pMousePosition;
-        std::bitset<3> mouseButtonStates;//3 bits set to zero
         static InputHandler* pInputHandler;//pointer to the instance
+
+        const Uint8* pKeyStates;//pointer to the SDL inbuilt key states array
+
+        Vector2D* pMousePosition;
+
+        std::bitset<3> mouseButtonStates;//3 bits set to zero
 
         //handle mouse events
         void onMouseButtonDown(SDL_Event& event);
