@@ -1,5 +1,10 @@
 #include "GameObjectFactory.h"
 
+#include "ButtonCreator.h"
+#include "EnemyCreator.h"
+#include "PlayerCreator.h"
+#include "StaticGraphicCreator.h"
+
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -21,6 +26,11 @@ GameObjectFactory* GameObjectFactory::getpGameObjectFactory()
 GameObjectFactory::GameObjectFactory()
 {
     cout << " 17 C GameObjectFactory" << endl;
+
+    registerType("Button", new ButtonCreator());
+    registerType("Enemy", new EnemyCreator());
+    registerType("Player", new PlayerCreator());
+    registerType("StaticGraphic", new StaticGraphicCreator());
 }
 
 GameObjectFactory::~GameObjectFactory()
@@ -35,18 +45,17 @@ GameObjectFactory::~GameObjectFactory()
     }
 }
 
-bool GameObjectFactory::registerType(std::string typeID, ObjectCreatorABC* pCreator)
+void GameObjectFactory::registerType(std::string typeID, ObjectCreatorABC* pCreator)
 {
     auto Iterator = creatorUMAP.find(typeID);
 
     if(Iterator != creatorUMAP.cend())
     {
         delete pCreator;
-        return false;//type already exists
+        return;//type already exists
     }
 
     creatorUMAP[typeID] = pCreator;//map string to creator
-    return true;
 }
 
 GameObjectABC* GameObjectFactory::createObject(std::string typeID)
@@ -54,8 +63,11 @@ GameObjectABC* GameObjectFactory::createObject(std::string typeID)
     auto Iterator = creatorUMAP.find(typeID);
 
     if(Iterator == creatorUMAP.cend())
-       return nullptr;//type does not exist
+    {
+        return nullptr;//type does not exist
+    }
 
     ObjectCreatorABC* pCreator = (*Iterator).second;
+
     return pCreator->createGameObject();
 }
