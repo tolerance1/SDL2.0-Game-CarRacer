@@ -11,7 +11,6 @@ class GameObjectFactory
     public:
         ~GameObjectFactory();
 
-        bool registerType(std::string typeID, ObjectCreatorABC* pCreator);
         GameObjectABC* createObject(std::string typeID);
 
         static GameObjectFactory* getpGameObjectFactory();//create a single instance
@@ -21,6 +20,8 @@ class GameObjectFactory
 
         //container for object creators
         std::unordered_map<std::string, ObjectCreatorABC*> creatorUMAP;
+
+        void registerType(std::string typeID, ObjectCreatorABC* pCreator);
 
         GameObjectFactory();
         GameObjectFactory(const GameObjectFactory& rhs);
