@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "ObjectCreatorABC.h"
+#include "GameObjectABC.h"
 
 class GameObjectFactory
 {
@@ -18,14 +18,31 @@ class GameObjectFactory
     private:
         static GameObjectFactory* pGameObjectFactory;//pointer to the instance
 
-        //container for object creators
-        std::unordered_map<std::string, ObjectCreatorABC*> creatorUMAP;
+        typedef GameObjectABC* (*pFunc)();
 
-        void registerType(std::string typeID, ObjectCreatorABC* pCreator);
+        //container for object creators
+        std::unordered_map<std::string, pFunc> objectFactory;
+
+        template <typename T>
+        void registerType(std::string typeID);
 
         GameObjectFactory();
         GameObjectFactory(const GameObjectFactory& rhs);
         GameObjectFactory& operator=(const GameObjectFactory& rhs);
 };
+
+template <typename T>
+void GameObjectFactory::registerType(std::string typeID)
+{
+    auto Iterator = objectFactory.find(typeID);
+
+    if(Iterator != objectFactory.cend())
+    {
+        return;//type already exists
+    }
+
+    //map a string to a creator functor
+    objectFactory[typeID] = [] () -> GameObjectABC* {return new T(); };
+}
 
 #endif // GAMEOBJECTFACTORY_H

@@ -1,9 +1,9 @@
 #include "GameObjectFactory.h"
 
-#include "ButtonCreator.h"
-#include "EnemyCreator.h"
-#include "PlayerCreator.h"
-#include "StaticGraphicCreator.h"
+#include "Button.h"
+#include "Enemy.h"
+#include "Player.h"
+#include "StaticGraphic.h"
 
 #include <iostream>
 using std::cout;
@@ -27,47 +27,25 @@ GameObjectFactory::GameObjectFactory()
 {
     cout << " 17 C GameObjectFactory" << endl;
 
-    registerType("Button", new ButtonCreator());
-    registerType("Enemy", new EnemyCreator());
-    registerType("Player", new PlayerCreator());
-    registerType("StaticGraphic", new StaticGraphicCreator());
+    registerType<Button>("Button");
+    registerType<Enemy>("Enemy");
+    registerType<Player>("Player");
+    registerType<StaticGraphic>("StaticGraphic");
 }
 
 GameObjectFactory::~GameObjectFactory()
 {
     cout << " 17 D GameObjectFactory" << endl;
-
-    //release the object creators
-    while(! creatorUMAP.empty())
-    {
-        delete creatorUMAP.begin()->second;//deletes the object creator pointed to
-        creatorUMAP.erase(creatorUMAP.begin());
-    }
-}
-
-void GameObjectFactory::registerType(std::string typeID, ObjectCreatorABC* pCreator)
-{
-    auto Iterator = creatorUMAP.find(typeID);
-
-    if(Iterator != creatorUMAP.cend())
-    {
-        delete pCreator;
-        return;//type already exists
-    }
-
-    creatorUMAP[typeID] = pCreator;//map string to creator
 }
 
 GameObjectABC* GameObjectFactory::createObject(std::string typeID)
 {
-    auto Iterator = creatorUMAP.find(typeID);
+    auto Iterator = objectFactory.find(typeID);
 
-    if(Iterator == creatorUMAP.cend())
+    if(Iterator == objectFactory.cend())
     {
         return nullptr;//type does not exist
     }
 
-    ObjectCreatorABC* pCreator = (*Iterator).second;
-
-    return pCreator->createGameObject();
+    return Iterator->second();
 }
