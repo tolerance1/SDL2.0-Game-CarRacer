@@ -7,6 +7,8 @@
 #include "base64.h"
 #include "zlib.h"
 #include "GameObjectFactory.h"
+#include "WaterTileLayer.h"
+#include "RoadTileLayer.h"
 
 #include <iostream>
 using std::cout;
@@ -17,6 +19,9 @@ LevelParser::LevelParser(std::vector<std::string>* pTextureIDs,
 : pTextureIDs(pTextureIDs), pCollisionManager(pCollisionManager)
 {
     cout << " 28 C LevelParser" << endl;
+
+    registerLayer<WaterTileLayer>("Tile Layer Water");
+    registerLayer<RoadTileLayer>("Tile Layer Road");
 }
 
 LevelParser::~LevelParser()
@@ -39,6 +44,10 @@ Level* LevelParser::parseLevel(const char* levelFile)
     //create the level object
     Level* pLevel = new Level();
 
+    //store pointers to level's attributes
+    pTilesets = pLevel->getTilesets();
+    pLayers = pLevel->getLayers();
+
     //get the document root element
     TiXmlElement* pRoot = xmlDoc.RootElement();
 
@@ -54,23 +63,22 @@ Level* LevelParser::parseLevel(const char* levelFile)
     {
         if(elem->ValueStr() == "tileset")
         {
-            parseTilesets(elem, pLevel->getTilesets());
+            parseTilesets(elem);
         }
         else if(elem->ValueStr() == "layer")
         {
-            parseTileLayer(elem, pLevel->getLayers(), pLevel->getTilesets());
+            parseTileLayer(elem);
         }
         else if(elem->ValueStr() == "objectgroup")
         {
-            parseObjectLayer(elem, pLevel->getLayers());
+            parseObjectLayer(elem);
         }
     }
 
     return pLevel;
 }
 
-void LevelParser::parseTilesets(TiXmlElement* pTilesetRoot,
-                                std::vector<Tileset>* pTilesets)
+void LevelParser::parseTilesets(TiXmlElement* pTilesetRoot)
 {
     //store the required values of the tileset node's attributes
     std::string filename = pTilesetRoot->FirstChildElement()->Attribute("source");
@@ -95,15 +103,14 @@ void LevelParser::parseTilesets(TiXmlElement* pTilesetRoot,
     pTilesetRoot->FirstChildElement()->Attribute("width", &tileset.width);
     pTilesetRoot->FirstChildElement()->Attribute("height", &tileset.height);
     tileset.numColumns = tileset.width / tileset.tileWidth;
+    pTilesetRoot->Attribute("animSpeed", &tileset.animSpeed);
 
     pTilesets->push_back(tileset);
 }
 
-void LevelParser::parseTileLayer(TiXmlElement* pLayerRoot,
-                                 std::vector<LayerABC*>* pLayers,
-                                 const std::vector<Tileset>* pTilesets)
+void LevelParser::parseTileLayer(TiXmlElement* pLayerRoot)
 {
-    TileLayer* pTileLayer = new TileLayer(tileSize, *pTilesets);
+    LayerABC* pTileLayer = createLayer(pLayerRoot->Attribute("name"));
 
     //create an empty tile IDs map
     std::vector<std::vector<int>> tileData;
@@ -156,13 +163,12 @@ void LevelParser::parseTileLayer(TiXmlElement* pLayerRoot,
         }
     }
 
-    pTileLayer->setTileIDs(tileData);//move the tile IDs map
+    static_cast<TileLayer*>(pTileLayer)->setTileIDs(tileData);//move the tile IDs map
 
     pLayers->push_back(pTileLayer);
 }
 
-void LevelParser::parseObjectLayer(TiXmlElement* pObjectsRoot,
-                                   std::vector<LayerABC*>* pLayers)
+void LevelParser::parseObjectLayer(TiXmlElement* pObjectsRoot)
 {
     //create an object layer
     ObjectLayer* pObjectLayer = new ObjectLayer();
@@ -214,7 +220,7 @@ void LevelParser::parseObject(TiXmlElement* pObjectNode,
     int destX = 0, destY = 0;
     int width = 0, height = 0;
     int currentRow = 0, currentFrame = 0;
-    int numFrames = 1;
+    int numFrames = 1, animSpeed = 1;
     int callbackID = 0;
 
     //store the values of the node's attributes
@@ -254,6 +260,10 @@ void LevelParser::parseObject(TiXmlElement* pObjectNode,
                     {
                         property->Attribute("value", &numFrames);
                     }
+                    else if(property->Attribute("name") == std::string("animSpeed"))
+                    {
+                        property->Attribute("value", &animSpeed);
+                    }
 
                 }
             }
@@ -269,7 +279,8 @@ void LevelParser::parseObject(TiXmlElement* pObjectNode,
                                             destX, destY,
                                             width, height,
                                             currentRow, currentFrame,
-                                            numFrames, callbackID));
+                                            numFrames, animSpeed,
+                                            callbackID));
 
     if(pObjectNode->Attribute("type") == std::string("Player"))//store pointer to a Player
     {
@@ -282,4 +293,16 @@ void LevelParser::parseObject(TiXmlElement* pObjectNode,
 
     //push object into layer's container
     pObjectLayer->getGameObjects()->push_back(pObject);
+}
+
+LayerABC* LevelParser::createLayer(std::string layerName)
+{
+    auto Iterator = layerFactory.find(layerName);
+
+    if(Iterator != layerFactory.cend())
+    {
+        return Iterator->second(tileSize, *pTilesets);
+    }
+
+	return nullptr;//layer does not exist
 }
