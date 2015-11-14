@@ -14,6 +14,9 @@ class Enemy : public GameObject
         void clean();
 
         void initObject(const SetObjectParams* pInput);
+
+    private:
+        int animSpeed;
 };
 
 #endif // ENEMY_H

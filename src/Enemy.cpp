@@ -23,13 +23,15 @@ void Enemy::updateObjectParams()
 {
     Acceleration.setX(0.02);
 
-    currentFrame = int(((SDL_GetTicks() / 100) % numFrames));
+    currentFrame = int((SDL_GetTicks() / animSpeed) % numFrames);
 
     GameObject::updateObjectParams();
 }
 
 void Enemy::initObject(const SetObjectParams* pInput)
 {
+    animSpeed = pInput->getAnimSpeed();
+
     GameObject::initObject(pInput);
 }
 

@@ -70,13 +70,15 @@ void Player::updateObjectParams()
     queryMouseStates();
     queryKeyStates();
 
-    currentFrame = int(((SDL_GetTicks() / 100) % numFrames));
+    currentFrame = int((SDL_GetTicks() / animSpeed) % numFrames);
 
     GameObject::updateObjectParams();
 }
 
 void Player::initObject(const SetObjectParams* pInput)
 {
+    animSpeed = pInput->getAnimSpeed();
+
     callbackID = pInput->getCallbackID();
 
     GameObject::initObject(pInput);

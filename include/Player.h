@@ -16,6 +16,8 @@ class Player : public GameObject
         void initObject(const SetObjectParams* pInput);
 
     private:
+        int animSpeed;
+
         int callbackID;
 
         void queryMouseStates();
