@@ -49,7 +49,7 @@ bool Game::init()
         gameHeight = 480;
 
         pWindow =
-        SDL_CreateWindow("CarRacing", SDL_WINDOWPOS_CENTERED, 100, gameWidth, gameHeight, 0);
+        SDL_CreateWindow("CarRacing", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, gameWidth, gameHeight, 0);
 
         if(pWindow != NULL)
         {
