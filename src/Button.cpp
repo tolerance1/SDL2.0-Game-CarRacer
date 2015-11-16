@@ -24,12 +24,12 @@ void Button::drawObject()
 
 void Button::updateObjectParams()
 {
-    Vector2D* pMousePosition = InputHandler::getpInputHandler()->getpMousePosition();
+    const Vector2D& mousePosition = InputHandler::getpInputHandler()->getMousePosition();
 
-    if(pMousePosition->getX() > Position.getX() &&
-       pMousePosition->getX() < Position.getX() + width &&
-       pMousePosition->getY() > Position.getY() &&
-       pMousePosition->getY() < Position.getY() + height)
+    if(mousePosition.getX() > Position.getX() &&
+       mousePosition.getX() < Position.getX() + width &&
+       mousePosition.getY() > Position.getY() &&
+       mousePosition.getY() < Position.getY() + height)
     {
         if(! InputHandler::getpInputHandler()->getMouseButtonState(LEFT))
         {
