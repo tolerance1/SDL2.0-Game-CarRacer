@@ -12,7 +12,8 @@ class SetObjectParams
         SetObjectParams(std::string textureID, int destX, int destY,
                         int width, int height,
                         int currentRow, int currentFrame,
-                        int numFrames, int callbackID,
+                        int numFrames, int animSpeed,
+                        int callbackID,
                         double rotationAngle = 0,
                         SDL_RendererFlip flip = SDL_FLIP_NONE);
         ~SetObjectParams();
@@ -25,6 +26,7 @@ class SetObjectParams
         int getCurrentFrame() const {return currentFrame; }
         int getCurrentRow() const {return currentRow; }
         int getNumFrames() const {return numFrames; }
+        int getAnimSpeed() const {return animSpeed; }
         int getCallbackID() const {return callbackID; }
         double getRotationAngle() const {return rotationAngle; }
         SDL_RendererFlip getFlip() const {return flip; }
@@ -42,6 +44,7 @@ class SetObjectParams
         int currentRow;
 
         int numFrames;
+        int animSpeed;
 
         int callbackID;
 
