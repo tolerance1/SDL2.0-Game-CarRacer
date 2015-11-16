@@ -21,7 +21,6 @@ InputHandler* InputHandler::getpInputHandler()
 }
 
 InputHandler::InputHandler()
-: pMousePosition(new Vector2D(0, 0))
 {
     cout << " 9 C InputHandler" << endl;
 
@@ -31,8 +30,6 @@ InputHandler::InputHandler()
 InputHandler::~InputHandler()
 {
     cout << " 9 D InputHandler" << endl;
-
-    delete pMousePosition;//release mouse position memory
 }
 
 bool InputHandler::getMouseButtonState(int buttonNumber) const
@@ -40,9 +37,9 @@ bool InputHandler::getMouseButtonState(int buttonNumber) const
     return mouseButtonStates[buttonNumber];
 }
 
-Vector2D* InputHandler::getpMousePosition() const
+const Vector2D& InputHandler::getMousePosition() const
 {
-    return pMousePosition;
+    return mousePosition;
 }
 
 bool InputHandler::getKeyState(SDL_Scancode keyCode) const
@@ -130,8 +127,8 @@ void InputHandler::onMouseButtonUp(SDL_Event& event)
 
 void InputHandler::onMouseMove(SDL_Event& event)
 {
-    pMousePosition->setX(event.motion.x);
-    pMousePosition->setY(event.motion.y);
+    mousePosition.setX(event.motion.x);
+    mousePosition.setY(event.motion.y);
 }
 
 void InputHandler::clean()
